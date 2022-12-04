@@ -1,0 +1,854 @@
+#:import Factory kivy.factory.Factory
+
+#https://stackoverflow.com/questions/55759082/how-to-write-popup-in-kv-file-when-one-press-button
+
+# <TestPopup@Popup>:
+#     title: "Email Popup"
+#     size_hint: (None, None)
+#     size: (400,200)
+#     auto_dismiss: False
+
+<EmailPopup@Popup>:
+    title: "Email Popup"
+    size_hint: (None, None)
+    size: (400,200)
+    auto_dismiss: False
+    FloatLayout:
+        Label:
+            pos_hint: {'x': 0.028, 'center_y':0.8}
+            size_hint: 0.35,0.08
+            text: "New Email:"
+        TextInput:
+            id: email
+            pos_hint: {'x': 0.1, 'center_y':0.6}
+            size_hint: 0.8, 0.25
+            multiline: False
+        Button:
+            text: "Cancel"
+            pos_hint: {"center_x":0.65,"center_y":0.15}
+            size_hint: 0.25, 0.2
+            on_release:
+                root.dismiss()
+        Button:
+            text: "Submit Changes"
+            pos_hint: {"center_x":0.35,"center_y":0.15}
+            size_hint: 0.35, 0.2
+            on_release:
+                root.dismiss()
+
+
+<ThreeFieldLine>:
+    orientation: 'horizontal'
+    label_1: ''
+    label_2: ''
+    label_3: ''
+    Label:
+        text: root.label_1
+    Label:
+        text: root.label_2
+    Label:
+        text: root.label_3
+
+<FourFieldLine>:
+    orientation: 'horizontal'
+    label_1: ''
+    label_2: ''
+    label_3: ''
+    label_4: ''
+    Label:
+        text: root.label_1
+    Label:
+        text: root.label_2
+    Label:
+        text: root.label_3
+    Label:
+        text: root.label_4
+
+<FiveFieldLine>:
+    orientation: 'horizontal'
+    label_1: ''
+    label_2: ''
+    label_3: ''
+    label_4: ''
+    label_5: ''
+    Label:
+        text: root.label_1
+    Label:
+        text: root.label_2
+    Label:
+        text: root.label_3
+    Label:
+        text: root.label_4
+    Label:
+        text: root.label_5
+
+
+#################################### ADMIN ##########################################################################
+<AdminHomepage>:
+    # classes: classes # expose the widget
+    supply: supply
+    equipment: equipment
+    admin_email: admin_email
+    subscription: subscription
+
+    TabbedPanel:
+        size_hint: 1, 0.9
+        pos_hint: {'x': 0, 'top':0.9}
+        tab_width: root.width / 7
+        do_default_tab: False
+        TabbedPanelItem:
+            text: "Account Info"
+            text_size: self.size
+            FloatLayout:
+                GridLayout:
+                    pos_hint: {"center_x":0.5,"center_y":0.65}
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.6
+                    padding: [0,0]
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        size_hint_y: 0.5
+                        size_hint_x: 0.3
+                        
+                        Label:
+                            text: "Name:"
+                        Label:
+                            text: "Email:"
+                        Label:
+                            text: "Phone:"
+                        Label:
+                            text: "Home Address:"
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        # size_hint_y: 0.5
+                        # size_hint_x: 0.3
+
+                        Label:
+                            text: "FirstName LastName"
+                        Label:
+                            text: "Email@email.com"
+                        Label:
+                            text: "111111111"
+                        Label:
+                            text: "HomeAddressGoesHere"
+
+        
+               #----------------- CHANGE MEMBERS FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "Member Control Panel"
+            text_size: self.size
+            FloatLayout:
+                Label:
+                    text: "Email of User:"
+                    pos_hint: {"center_x": 0.215, "center_y":0.775}
+                TextInput:
+                    id: admin_email
+                    font_size: (root.width**2 + root.height**2) / 14**4
+                    pos_hint: {"center_x": 0.5, "center_y":0.7}
+                    size_hint: 0.7,0.1
+                    multiline: False
+                GridLayout:
+                    cols: 4
+                    rows: 1
+                    spacing: [0.01, 0]
+                    pos_hint: {"center_x": 0.5, "center_y":0.575}
+                    size_hint: 0.7, 0.1
+                    Button:
+                        text: "Add Client"
+                        on_release: root.moveToClient()
+                    Button:
+                        text: "Remove Client"
+                    Button:
+                        text: "Add Member"
+                    Button:
+                        text: "Remove Member"
+                    Button:
+                        text: "Add Admin"
+                    Button:
+                        text: "Remove Admin"
+                    
+
+                GridLayout:
+                    cols: 1
+                    row: 1
+                    pos_hint: {"center_x": 0.5, "center_y":0.465}
+                    size_hint: 0.7, 0.1
+                    Button:
+                        text: "Display Info for User"
+
+                
+
+        #----------------- SEE SUPPLIES FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Supply Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Supply No."
+                    Label:
+                        text: "Supply Name"
+                    Label:
+                        text: "Stock"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: supply
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+
+        #----------------- SEE EQUIPMENT FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Equipment Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Equipment No."
+                    Label:
+                        text: "Amount"
+                    Label:
+                        text: "Condition"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: equipment
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+            # TextInput:
+            #     id: equip_cond
+            # Button:
+            #     text: 
+            
+        #----------------- SEE SUBSCRIPTIONS FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Subscription Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Login ID"
+                    Label:
+                        text: "Name"
+                    Label:
+                        text: "Status"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: subscription
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+        #----------------- SEE SCHEDULE FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Schedule"
+            text_size: self.size
+
+    Button:
+        text: "Logout"
+        font_size: (root.width**2 + root.height**2) / 15**4
+        pos_hint: {"x":0.002,"top":1}
+        size_hint: 0.15, 0.1
+        on_release: 
+            root.logout()
+            app.root.current = "login"
+            root.manager.transition.direction = "up"
+
+
+<EmpHomepage>:
+    classes: classes # expose the widget
+    supply: supply
+    equipment: equipment
+    client_email: client_email
+
+    TabbedPanel:
+        size_hint: 1, 0.9
+        pos_hint: {'x': 0, 'top':0.9}
+        tab_width: root.width / 7
+        do_default_tab: False
+        TabbedPanelItem:
+            text: "Account Info"
+            text_size: self.size
+            FloatLayout:
+                GridLayout:
+                    pos_hint: {"center_x":0.5,"center_y":0.65}
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.6
+                    padding: [0,0]
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        size_hint_y: 0.5
+                        size_hint_x: 0.3
+                        
+                        Label:
+                            text: "Name:"
+                        Label:
+                            text: "Email:"
+                        Label:
+                            text: "Phone:"
+                        Label:
+                            text: "Home Address:"
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        # size_hint_y: 0.5
+                        # size_hint_x: 0.3
+                        RecycleView:
+                            id: accountInfo
+                            viewClass: "FourFieldLine"
+                            RecycleBoxLayout:
+                                default_size: None, dp(56)
+                                default_size_hint: 1, None
+                                size_hint_y: None
+                                height: self.minimum_height
+                                orientation: 'vertical'
+                            
+                Button:
+                    text: "Cancel Membership (Debug)"
+                    # background_color: (0.1, 0.1, 0.1, 1)
+                    font_size: (root.width**2 + root.height**2) / 15**4
+                    pos_hint: {"center_x":0.5,"center_y":0.1}
+                    size_hint: 0.35, 0.1
+                    on_release: Factory.EmailPopup().open()
+
+        
+        #----------------- CHANGE MEMBERS FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "Member Control Panel"
+            text_size: self.size
+            FloatLayout:
+                Label:
+                    text: "Email of User:"
+                    pos_hint: {"center_x": 0.215, "center_y":0.775}
+                TextInput:
+                    id: client_email
+                    font_size: (root.width**2 + root.height**2) / 14**4
+                    pos_hint: {"center_x": 0.5, "center_y":0.7}
+                    size_hint: 0.7,0.1
+                    multiline: False
+                GridLayout:
+                    cols: 4
+                    rows: 1
+                    spacing: [0.01, 0]
+                    pos_hint: {"center_x": 0.5, "center_y":0.575}
+                    size_hint: 0.7, 0.1
+                    Button:
+                        text: "Add Client"
+                        on_release: root.moveToClient()
+                    Button:
+                        text: "Remove Client"
+                    Button:
+                        text: "Add Member"
+                    Button:
+                        text: "Remove Member"
+                GridLayout:
+                    cols: 1
+                    row: 1
+                    pos_hint: {"center_x": 0.5, "center_y":0.465}
+                    size_hint: 0.7, 0.1
+                    Button:
+                        text: "Display Info for User"
+
+                
+                    
+        #----------------- SEE CLASSES FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "See Classes"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 5
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Date"
+                    Label:
+                        text: "Time"
+                    Label:
+                        text: "Branch No."
+                    Label:
+                        text: "Trainer E-mail"
+                    Label:
+                        text: "Trainer Name"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: classes
+                        viewclass: 'FiveFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+        #----------------- SEE SUPPLIES FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "See Supply Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Supply No."
+                    Label:
+                        text: "Supply Name"
+                    Label:
+                        text: "Stock"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: supply
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+
+        #----------------- SEE EQUIPMENT FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "See Equipment Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Equipment No."
+                    Label:
+                        text: "Amount"
+                    Label:
+                        text: "Condition"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: equipment
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+            # TextInput:
+            #     id: equip_cond
+            # Button:
+            #     text: 
+            
+        #----------------- SEE ROOMS FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "See Room Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Room ID"
+                    Label:
+                        text: "Date"
+                    Label:
+                        text: "Duration"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: supply
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+        #----------------- SEE SCHEDULE FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "See Schedule"
+            text_size: self.size
+            TabbedPanel:
+                size_hint: 1, 0.9
+                tab_height: root.height / 7
+                do_default_tab: False
+                TabbedPanelItem:
+                    text: "Sunday"
+                TabbedPanelItem:
+                    text: "Monday"
+                TabbedPanelItem:
+                    text: "Tuesday"
+                TabbedPanelItem:
+                    text: "Wednesday"
+                TabbedPanelItem:
+                    text: "Thursday"
+                TabbedPanelItem:
+                    text: "Friday"
+                TabbedPanelItem:
+                    text: "Saturday"
+
+
+    Button:
+        text: "Logout"
+        font_size: (root.width**2 + root.height**2) / 15**4
+        pos_hint: {"x":0.002,"top":1}
+        size_hint: 0.15, 0.1
+        on_release: 
+            root.logout()
+            app.root.current = "login"
+            root.manager.transition.direction = "up"
+
+<ClientHomepage>:
+    classes: classes # expose the widget
+
+    TabbedPanel:
+        size_hint: 1, 0.9
+        pos_hint: {'x': 0, 'top':0.9}
+        tab_width: root.width / 2
+        do_default_tab: False
+        TabbedPanelItem:
+            text: "Account Info"
+            FloatLayout:
+                GridLayout:
+                    pos_hint: {"center_x":0.5,"center_y":0.65}
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.6
+                    padding: [0,0]
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        size_hint_y: 0.5
+                        size_hint_x: 0.3
+                        
+                        Label:
+                            text: "Name:"
+                        Label:
+                            text: "Email:"
+                        Label:
+                            text: "Phone:"
+                        Label:
+                            text: "Home Address:"
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        # size_hint_y: 0.5
+                        # size_hint_x: 0.3
+
+                        Label:
+                            text: "FirstName LastName"
+                        Label:
+                            text: "Email@email.com"
+                        Label:
+                            text: "111111111"
+                        Label:
+                            text: "HomeAddressGoesHere"
+                Button:
+                    text: "Cancel Membership (Debug)"
+                    # background_color: (0.1, 0.1, 0.1, 1)
+                    font_size: (root.width**2 + root.height**2) / 15**4
+                    pos_hint: {"center_x":0.5,"center_y":0.1}
+                    size_hint: 0.35, 0.1
+                    on_release: Factory.EmailPopup().open()
+
+        
+        TabbedPanelItem:
+            text: "See Classes"
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 5
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Date"
+                    Label:
+                        text: "Time"
+                    Label:
+                        text: "Branch No."
+                    Label:
+                        text: "Trainer E-mail"
+                    Label:
+                        text: "Trainer Name"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: classes
+                        viewclass: 'FiveFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+            
+
+    Button:
+        text: "Logout"
+        font_size: (root.width**2 + root.height**2) / 15**4
+        pos_hint: {"x":0.002,"top":1}
+        size_hint: 0.15, 0.1
+        on_release: 
+            root.logout()
+            app.root.current = "login"
+            root.manager.transition.direction = "up"
+
+
+<LoginForm>:
+    email: email
+    passw: passw
+
+    FloatLayout:
+
+        Label:
+            text: "Placeholder Logo"
+            font_size: (root.width**2 + root.height**2) / 12**4
+            font_name: "Arialbd"
+            pos_hint: {"x":0.2,"y":0.8}
+            size_hint: 0.6, 0.1
+
+        Label:
+            text: "Email: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.7}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: email
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.6725}
+            size_hint: 0.35,0.08
+            multiline: False
+
+        Label:
+            text: "Password: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.6}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: passw
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.5725}
+            size_hint: 0.35,0.08
+            multiline: False
+            password: True
+
+        Button:
+            text: "Create an Account"
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint: {"x":0.2,"y":0.3}
+            size_hint: 0.6, 0.1
+            on_release: 
+                app.root.current = "registration"
+                root.manager.transition.direction = "left"
+
+        Button:
+            text: "Login"
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint: {"x":0.2,"y":0.05}
+            size_hint: 0.6, 0.2
+            on_release: 
+                root.submit()
+                if (root.userType == "client"): \
+                app.root.current = "chomepage"; \
+                root.manager.transition.direction = "down" 
+                elif (root.userType == "ruser"): \
+                app.root.current = "ehomepage"; \
+                root.manager.transition.direction = "down" 
+                elif (root.userType == "admin"): \
+                app.root.current = "ahomepage"; \
+                root.manager.transition.direction = "down" 
+
+
+<RegForm>:
+    fname: fname
+    lname: lname
+    email: email
+    addr: addr
+    phone: phone
+    ssn: ssn
+    passw: passw
+
+    FloatLayout:
+        Label:
+            text: "Account Registration"
+            font_size: (root.width**2 + root.height**2) / 13.5**4
+            font_name: "Arialbd"
+            pos_hint: {"x":0.35,"top":1}
+            size_hint: 0.25, 0.15
+
+        Label:
+            text: "First Name: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.9}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: fname
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.8725}
+            size_hint: 0.35,0.08
+            multiline: False
+
+        Label:
+            text: "Last Name: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.8}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: lname
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.7725}
+            size_hint: 0.35,0.08
+            multiline: False
+
+        Label:
+            text: "Email: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.7}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: email
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.6725}
+            size_hint: 0.35,0.08
+            multiline: False
+
+        Label:
+            text: "Address: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.6}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: addr
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.5725}
+            size_hint: 0.35,0.08
+            multiline: False
+
+        Label:
+            text: "Phone Number: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.5}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: phone
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.4725}
+            size_hint: 0.35,0.08
+            multiline: False
+            input_filter: "int"
+            on_text:
+                if len(self.text) >= 10: self.text = self.text[0:10]
+
+        Label:
+            text: "SSN: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0.1,"top":0.4}
+            size_hint: 0.35, 0.15
+        TextInput:
+            id: ssn
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.3725}
+            size_hint: 0.35,0.08
+            multiline: False
+            input_filter: "int"
+            on_text:
+                if len(self.text) >= 10: self.text = self.text[0:9]
+
+        Label:
+            text: "Password: "
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.1, "top":0.3}
+            size_hint: 0.35,0.15 
+
+        TextInput:
+            id: passw  
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x": 0.45, "top":0.2725}
+            size_hint: 0.35,0.08
+            multiline: False
+            password: True
+
+
+        Button:
+            text: "Go Back"
+            font_size: (root.width**2 + root.height**2) / 14**4
+            pos_hint: {"x":0,"top":1}
+            size_hint: 0.15, 0.1
+            on_release: 
+                app.root.current = "login"
+                root.manager.transition.direction = "right"
+
+        Button:
+            text: "Submit"
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint: {"x":0.2,"y":0.05}
+            size_hint: 0.6, 0.1
+            on_release: 
+                if (root.submit() == 0): \
+                app.root.current = "login"; \
+                root.manager.transition.direction = "right" 

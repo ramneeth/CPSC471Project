@@ -2,12 +2,13 @@ from connection import *
 from Associate import *
 
 class Equipment:
-    def __init__(self, no, amount, condition):
+    def __init__(self, no, amount, condition, name):
         self.no = no
         self.amount = amount
         self.condition = condition
         self.branch = 1
-        createEquip(no, amount, condition, self.branch)
+        self.equipment_name = name
+        createEquip(no, amount, condition, self.branch, name)
         
     def updateCondition(self, status):
         updateEquipCond(self.no, status)

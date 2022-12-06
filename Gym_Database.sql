@@ -245,17 +245,11 @@ DROP TABLE IF EXISTS EQUIPMENT;
 CREATE TABLE EQUIPMENT (
 equipment_no INT NOT NULL,
 cdn VARCHAR(15) NOT NULL,
-duration INT,
+amount INT,
 branch_no INT NOT NULL,
+equipment_name VARCHAR(30) NOT NULL,
 PRIMARY KEY(equipment_no),
 FOREIGN KEY(branch_no) REFERENCES GYM(branch_no) );
-
-DROP TABLE IF EXISTS EQUIPMENT_AMOUNT;
-CREATE TABLE EQUIPMENT_AMOUNT(
-equipment_no INT NOT NULL, 
-amount INT NOT NULL, 
-PRIMARY KEY(equipment_no, amount), 
-FOREIGN KEY(equipment_no) REFERENCES EQUIPMENT(equipment_no));
 
 DROP TABLE IF EXISTS SUPPLIES;
 CREATE TABLE SUPPLIES (
@@ -280,4 +274,3 @@ branch_no INT NOT NULL,
 PRIMARY KEY(login_id, branch_no), 
 FOREIGN KEY(branch_no) REFERENCES GYM(branch_no),
 FOREIGN KEY(login_id) REFERENCES SUBSCRIPTION(login_id));
-

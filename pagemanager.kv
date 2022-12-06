@@ -193,8 +193,251 @@
 
 #################################### ADMIN ##########################################################################
 <AdminHomepage>:
-    Label:
-        text: "Hi"
+    # classes: classes # expose the widget
+    supplies: supplies
+    equipment: equipment
+    subscription: subscription
+
+
+    admin_email: admin_email
+    admin_fname: admin_fname
+    admiin_lname: admin_lname
+    admin_demail: admin_demail
+    admin_phone: admin_phone
+    admin_addr: admin_addr
+    user_fname: user_fname
+    user_lname: user_lname
+    user_email: user_email
+    user_phone: user_phone
+    user_addr: user_addr
+
+    TabbedPanel:
+        size_hint: 1, 0.9
+        pos_hint: {'x': 0, 'top':0.9}
+        tab_width: root.width / 7
+        do_default_tab: False
+        TabbedPanelItem:
+            text: "Account Info"
+            text_size: self.size
+            FloatLayout:
+                GridLayout:
+                    pos_hint: {"center_x":0.5,"center_y":0.65}
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.6
+                    padding: [0,0]
+                    GridLayout:
+                        cols: 1
+                        rows: 4
+                        size_hint_y: 0.5
+                        size_hint_x: 0.3
+                        
+                        Label:
+                            id: user_fname
+                            text: "First Name:"
+                        Label:
+                            id: user_lname
+                            text: "Last Name:"
+                        Label:
+                            id: user_email
+                            text: "Email:"
+                        Label:
+                            id: user_phone
+                            text: "Phone:"
+                        Label:
+                            id: user_addr
+                            text: "Home Address:"
+                    
+
+               #----------------- CHANGE MEMBERS FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "Member Control Panel"
+            text_size: self.size
+            FloatLayout:
+                Label:
+                    text: "Email of User:"
+                    pos_hint: {"center_x": 0.215, "center_y":0.775}
+                TextInput:
+                    id: admin_email
+                    font_size: (root.width**2 + root.height**2) / 14**4
+                    pos_hint: {"center_x": 0.5, "center_y":0.7}
+                    size_hint: 0.7,0.1
+                    multiline: False
+                GridLayout:
+                    cols: 4
+                    rows: 1
+                    spacing: [0.01, 0]
+                    pos_hint: {"center_x": 0.5, "center_y":0.575}
+                    size_hint: 0.7, 0.1
+                    Button:
+                        text: "Add Client"
+                        on_release: root.moveToClient()
+                    Button:
+                        text: "Remove Client"
+                        on_release: root.removeClient()
+                    Button:
+                        text: "Add Member"
+                        on_release: root.moveToMember()
+                    Button:
+                        text: "Remove Member"
+                        on_release: root.removeMember()
+                    Button:
+                        text: "Add Manager"
+                        on_release: root.moveToAdmin()
+                    Button:
+                        text: "Remove Manager"
+                    Button:
+                        text: "Add Owner"
+                    Button:
+                        text: "Remove Owner"
+
+                    
+
+                GridLayout:
+                    cols: 1
+                    row: 1
+                    pos_hint: {"center_x": 0.5, "center_y":0.465}
+                    size_hint: 0.7, 0.1
+                    Button:
+                        text: "Display Info for User"
+                        on_release: root.getAdminAccountInfo()
+
+                GridLayout:
+                    cols: 1
+                    rows: 5
+                    size_hint_y: 0.25
+                    size_hint_x: 0.5
+                    pos_hint: {"center_x": 0.5, "center_y":0.265}
+                    Label:
+                        id: admin_fname
+                        text: ""
+                    Label:
+                        id: admin_lname
+                        text: ""
+                    Label:
+                        id: admin_demail
+                        text: ""
+                    Label:
+                        id: admin_phone
+                        text: ""
+                    Label:
+                        id: admin_addr
+                        text: ""
+
+                
+
+        #----------------- SEE SUPPLIES FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Supply Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Supply No."
+                    Label:
+                        text: "Supply Name"
+                    Label:
+                        text: "Stock"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: supplies
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+
+        #----------------- SEE EQUIPMENT FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Equipment Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Equipment No."
+                    Label:
+                        text: "Amount"
+                    Label:
+                        text: "Condition"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: equipment
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+            # TextInput:
+            #     id: equip_cond
+            # Button:
+            #     text: 
+            
+        #----------------- SEE SUBSCRIPTIONS FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Subscription Status"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Login ID"
+                    Label:
+                        text: "Name"
+                    Label:
+                        text: "Status"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: subscription
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
+
+        #----------------- SEE SCHEDULE FOR ADMIN ------------------#
+        TabbedPanelItem:
+            text: "See Schedule"
+            text_size: self.size
+
+    Button:
+        text: "Logout"
+        font_size: (root.width**2 + root.height**2) / 15**4
+        pos_hint: {"x":0.002,"top":1}
+        size_hint: 0.15, 0.1
+        on_release: 
+            root.logout()
+            app.root.current = "login"
+            root.manager.transition.direction = "up"
 
 
 <EmpHomepage>:

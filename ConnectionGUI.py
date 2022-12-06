@@ -292,6 +292,6 @@ class Database:
             self.connect.commit()
             return 0
         except Error as e:
-            print("ERROR: Something went wrong when updating equipment")
+            print("ERROR: Somethisng went wrong when updating equipment")
             print(e)
             return -1

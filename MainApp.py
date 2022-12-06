@@ -165,39 +165,238 @@ class FiveFieldLine(BoxLayout):
 
 
 class AdminHomepage(Screen):
-    # admin_email = ObjectProperty(None)
-    #tempClass = [["01/23/2022","9:50","0","test@gmail.com","John Smith"], ["01/24/2022","9:50","0","test2@gmail.com","Jalal Kawash"]]
-    pass 
+    admin_email = ObjectProperty(None)
+    admin_fname = ObjectProperty(None)
+    admin_lname = ObjectProperty(None)
+    admin_demail = ObjectProperty(None)
+    admin_phone = ObjectProperty(None)
+    admin_addr = ObjectProperty(None)
+    user_fname = ObjectProperty(None)
+    user_lname = ObjectProperty(None)
+    user_email = ObjectProperty(None)
+    user_phone = ObjectProperty(None)
+    user_addr = ObjectProperty(None)
+    pass  
 
-    # def moveToAdmin(self):
-    #     if (self.admin_email.text == ""):
-    #         pop = Popup(title = "Admin Control Panel",
-    #                 content = Label(text="ERROR: Please fill in email field."),
-    #                 size_hint=(None,None), size=(400,200))
-    #         pop.open()
-    #         return -1
-    #     elif (self.admin_email.text.find("@") == -1 or self.admin_email.text.find(".") == -1):
-    #         pop = Popup(title = "Admin Control Panel",
-    #                 content = Label(text="ERROR: Please use a valid email."),
-    #                 size_hint=(None,None), size=(400,200))
-    #         pop.open()
-    #         return -1
-    #     else:
-    #         if (db.createAdmin(self.admin_email.text) != -1):
-    #             pop = Popup(title = "Admin Control Panel",
-    #                 content = Label(text="Admin creation was successful"),
-    #                 size_hint=(None,None), size=(400,200))
-    #             pop.open()
-    #         else:
-    #             pop = Popup(title = "Admin Control Panel",
-    #                 content = Label(text="ERROR: Something went wrong when moving user to admin"),
-    #                 size_hint=(None,None), size=(400,200))
-    #         pop.open()
+    def __init__(self, **kwargs):
+        super(AdminHomepage, self).__init__(**kwargs)
+        # print(array)
+        # self.accountInfo.data = 
+        #self.classes.data = [{'label_1': str(x['date']), 'label_2': str(x['time']), 'label_3': str(x['email']), 'label_4': x['fname'], 'label_5': x['lname']} for x in self.getClasses()]
+        self.supplies.data = [{'label_1': str(x['supplyno']), 'label_2': str(x['supplyname']), 'label_3': str(x['stock'])} for x in self.getSupplies()]
+        #self.rooms.data = [{'label_1': str(x['roomid']), 'label_2': str(x['date']), 'label_3': str(x['duration'])} for x in self.getRooms()]
+        # print(self.supplies.data)
+
+    def on_enter(self):
+        self.getCurrentAccountInfo(loggedInEmail)
+        
+
+    def getCurrentAccountInfo(self,email):
+        result = db.getPersonInfo(email)
+        self.user_fname.text = "First Name: " + result[0]
+        self.user_lname.text = "Last Name: " + result[1]
+        self.user_email.text = "Email: " + result[2]
+        self.user_phone.text = "Phone Number: " + result[3]
+        self.user_addr.text = "Home Address: " + result[4]
+
+    def getSupplies(self):
+        headers = ["supplyname","supplyno","stock"]
+        result = [dict(zip(headers, data)) for data in db.getSupplyInfo()]
+        # print(result)
+        return result
+
+    def getClientAccountInfo(self):
+        if (self.client_email.text == ""):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please fill in email field."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        elif (self.client_email.text.find("@") == -1 or self.client_email.text.find(".") == -1):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please use a valid email."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        else:
+            userType = db.checkUserType(self.client_email.text)
+            if (userType == "member" or userType == "client" or userType == "person"):
+                result = db.getPersonInfo(self.client_email.text)
+                self.client_fname.text = "First Name: " + result[0]
+                self.client_lname.text = "Last Name: " + result[1]
+                self.client_demail.text = "Email: " + result[2]
+                self.client_phone.text = "Phone Number: " + result[3]
+                self.client_addr.text = "Home Address: " + result[4]
+                return 0
+            else:
+                pop = Popup(title = "Member Control Panel",
+                        content = Label(text="ERROR: Cannot display this user's info."),
+                        size_hint=(None,None), size=(400,200))
+                pop.open()
+                return -1
+
+    def moveToAdmin(self):
+        if (self.admin_email.text == ""):
+            pop = Popup(title = "Admin Control Panel",
+                    content = Label(text="ERROR: Please fill in email field."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        elif (self.admin_email.text.find("@") == -1 or self.admin_email.text.find(".") == -1):
+            pop = Popup(title = "Admin Control Panel",
+                    content = Label(text="ERROR: Please use a valid email."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        else:
+            if (db.createAdmin(self.admin_email.text) != -1):
+                pop = Popup(title = "Admin Control Panel",
+                    content = Label(text="Admin creation was successful"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+            else:
+                pop = Popup(title = "Admin Control Panel",
+                    content = Label(text="ERROR: Something went wrong when moving user to admin"),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+
+    def moveToClient(self):
+        if (self.client_email.text == ""):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please fill in email field."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        elif (self.client_email.text.find("@") == -1 or self.client_email.text.find(".") == -1):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please use a valid email."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        else:
+            userType = db.checkUserType(self.client_email.text)
+            if (userType != "person"):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Cannot move this user into client"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+            elif (db.createClient(self.client_email.text) != -1):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="Client creation was successful"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+                self.client_email.text = ""
+            else:
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Something went wrong when moving user to client"),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+
+
+    def removeClient(self):
+        if (self.client_email.text == ""):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please fill in email field."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        elif (self.client_email.text.find("@") == -1 or self.client_email.text.find(".") == -1):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please use a valid email."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        else:
+            userType = db.checkUserType(self.client_email.text)
+            print("User type for client is: ", userType)
+            if (userType != "member" and userType != "client"):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Cannot remove this user from client"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+            elif (db.removeClient(self.client_email.text) != -1):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="Client removal was successful"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+                self.client_email.text = ""
+            else:
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Something went wrong when removing from client"),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+
+    
+    def moveToMember(self):
+        userType = db.checkUserType(self.client_email.text)
+        if (self.client_email.text == ""):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please fill in email field."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        elif (self.client_email.text.find("@") == -1 or self.client_email.text.find(".") == -1):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please use a valid email."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        else:
+            userType = db.checkUserType(self.client_email.text)
+            if (userType != "client"):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Cannot move this user into member"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+            elif (db.createMember(self.client_email.text) != -1):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="Member creation was successful"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+                self.client_email.text = ""
+            else:
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Something went wrong when moving user to member"),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+
+    
+    def removeMember(self):
+        if (self.client_email.text == ""):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please fill in email field."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        elif (self.client_email.text.find("@") == -1 or self.client_email.text.find(".") == -1):
+            pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Please use a valid email."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+            return -1
+        else:
+            userType = db.checkUserType(self.client_email.text)
+            # print("User type for client is: ", userType)
+            if (userType != "member"):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Cannot remove this user from member"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+            elif (db.removeMember(self.client_email.text) != -1):
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="Member removal was successful"),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+                self.client_email.text = ""
+            else:
+                pop = Popup(title = "Member Control Panel",
+                    content = Label(text="ERROR: Something went wrong when removing from member"),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
         
     def logout(self):
         global loggedInEmail
         loggedInEmail = None
-
 
 class ClientHomepage(Screen):
     user_fname = ObjectProperty(None)

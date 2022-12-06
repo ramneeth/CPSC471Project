@@ -55,24 +55,31 @@ INSERT INTO ROOMS
 VALUES (1, "Monday" , "1:00"),
         (1, "Tuesday", "1:00"), 
         (2, "Monday", "1:00");
-
+        
 INSERT INTO GYM 
 VALUES (1, "59 Gym Lane", 123366775, 123333335);
 
-DROP TABLE IF EXISTS EQUIPMENT;
-CREATE TABLE EQUIPMENT (
-equipment_no INT NOT NULL,
-cdn VARCHAR(15) NOT NULL,
-branch_no INT NOT NULL,
-PRIMARY KEY(equipment_no),
-FOREIGN KEY(branch_no) REFERENCES GYM(branch_no) );
-
 INSERT INTO EQUIPMENT
-VALUES (1, "Working", 1), 
-        (2, "Broken", 1), 
-        (3, "Working", 1), 
-        (4, "Working", 1), 
-        (5, "Broken", 1), 
-        (6, "Working", 1), 
-        (7, "Working", 1);
-
+VALUES (1, "Working", 20, 1, "Bench"), 
+        (2, "Broken", 125, 1, "Barbell"), 
+        (3, "Working", 152, 1, "Dumbell"), 
+        (4, "Working", 1, 1, "Squat Rack"), 
+        (5, "Broken", 9, 1, "Leg Press"), 
+        (6, "Working", 10, 1, "Kettle Bell"), 
+        (7, "Working", 44, 1, "Medicine Ball");
+        
+INSERT INTO SUPPLIES
+VALUES ("Cloth", 1, 400, 1), 
+        ("Water Bottle", 2, 20, 1), 
+        ("Barbell Pad", 3, 125, 1), 
+        ("Foam Roller", 4, 20, 1), 
+        ("Hand Sanitizer", 5, 400, 1), 
+        ("Mirror", 6, 15, 1);
+        
+INSERT INTO SUBSCRIPTION
+VALUES ("gym_spotify", "spotify", 1), 
+        ("gym_netflix", "netflix", 1), 
+        ("gym_hulu", "hulu", 1), 
+        ("gym_apple", "apple Music", 1);
+        
+SELECT * FROM SUBSCRIPTION

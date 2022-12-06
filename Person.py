@@ -1,8 +1,8 @@
-from connection import *
+from ConnectionGUI import *
 
 class Person:
     
-    def __init__(self, ssn, f, l, address, phone, email, password):
+    def __init__(self, ssn, f, l, address, phone, email, password, database):
         self.ssn = ssn
         self.fname = f
         self.lname = l
@@ -10,8 +10,9 @@ class Person:
         self.phone = phone
         self.email = email
         self.password = password
+        self.db = database
         #create person inside the database
-        createPerson(ssn, f, l, address, phone, email, password)
+        self.db.createPerson(ssn, f, l, address, phone, email, password)
         
     def removePerson(self, ssn):
         deletePerson(ssn)

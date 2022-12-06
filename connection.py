@@ -345,6 +345,85 @@ def getClasses():
         classArray.append(new)
     return classArray
 
+#function to retrieve all the information about the equipment in the database
+def getEquipment():
+    cursor.execute("SELECT equipment_no, cdn, amount, equipment_name FROM EQUIPMENT;")
+    data = cursor.fetchall()
+    
+    equipArray = []
+    for row in data:
+        new = []
+        new.append(row[0]) #appends the equipment number
+        new.append(row[1]) #appends the condition
+        new.append(row[2]) #appends the amount
+        new.append(row[3]) #appends the name
+        
+            
+        equipArray.append(new)
+    return equipArray
+
+#function to retrieve all the information about the supplies in the database
+def getEquipment():
+    cursor.execute("SELECT sname, supply_no, stock FROM SUPPLIES;")
+    data = cursor.fetchall()
+    
+    suppArray = []
+    for row in data:
+        new = []
+        new.append(row[0]) #appends the supply name
+        new.append(row[1]) #appends the supply number
+        new.append(row[2]) #appends the stock (amount)
+        
+            
+        suppArray.append(new)
+    return suppArray
+
+#function to retrieve all the information about the subscriptions in the database
+def getEquipment():
+    cursor.execute("SELECT login_id FROM SUBSCRIPTION;")
+    data = cursor.fetchall()
+    
+    subArray = []
+    for row in data:
+        new = []
+        new.append(row[0]) #appends the login id
+        subArray.append(new)
+        
+    return subArray
+
+#function to retrieve all the information about the rooms in the database
+def getRooms():
+    cursor.execute("SELECT room_id, date, duration FROM ROOMS;")
+    data = cursor.fetchall()
+    
+    roomArray = []
+    for row in data:
+        new = []
+        new.append(row[0]) #appends the room number
+        new.append(row[1]) #appends the date it is booked on, if it is booked
+        new.append(row[2]) #appends the duration in which it is booked
+        
+            
+        roomArray.append(new)
+    return roomArray
+
+#function to get all the employee information to create the weekly schedule
+def getEmployees():
+    cursor.execute("SELECT fname, lname, e_mail FROM EMPLOYEES;")
+    data = cursor.fetchall()
+    
+    empArray = []
+    for row in data:
+        new = []
+        new.append(row[0]) #appends the employee's first name
+        new.append(row[1]) #appends the employee's last name
+        new.append(row[2]) #appends the employee's email
+        
+            
+        empArray.append(new)
+    return empArray
+    
+
 def validateLogin(user, password):
     cursor.execute("SELECT email FROM PERSON")
     

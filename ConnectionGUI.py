@@ -23,10 +23,10 @@ class Database:
         self.connect.close()
 
     def validateLogin(self, email, passw):
-        print("Checking for: "+email)
+        # print("Checking for: "+email)
         self.cursor.execute("SELECT email FROM PERSON")
         results = self.cursor.fetchall()
-        print(results)
+        # print(results)
         for  r in results:
             if email == r[0]:
                 query = "SELECT pass FROM PERSON WHERE email = %(email)s"
@@ -59,6 +59,51 @@ class Database:
                 return 0
             except Error as E:
                 print("Error occured while inserting into client.")
+                return -1
+        else:
+            return -1
+
+    def removeClient(self,email):
+        self.cursor.execute("Select client_id FROM CLIENT WHERE client_email = %s GROUP BY client_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            try:
+                self.cursor.execute("DELETE FROM CLIENT WHERE client_id = %s;", results[0])
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while deleting from client")
+                return -1
+        else:
+            return -1
+
+    def createMember(self, email):
+        self.cursor.execute("Select * FROM client WHERE client_email = %s GROUP BY client_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO MEMBER (mssn, client_id, member_email, fname, lname, member_pass, address, phone_number, status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 1)"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into member.")
+                return -1
+        else:
+            return -1
+
+    def removeMember(self,email):
+        self.cursor.execute("Select membership_id FROM MEMBER WHERE member_email = %s GROUP BY member_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            try:
+                self.cursor.execute("DELETE FROM MEMBER WHERE membership_id = %s;", results[0])
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while deleting from member")
                 return -1
         else:
             return -1
@@ -114,10 +159,18 @@ class Database:
         self.cursor.fetchall()
         if (self.cursor.rowcount > 0):
             return "ruser"
+        self.cursor.execute("Select * FROM TRAINER WHERE t_email = %s GROUP BY t_email", (email,))
+        self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            return "trainer"
         self.cursor.execute("Select * FROM EMPLOYEE WHERE e_email = %s GROUP BY e_email", (email,))
         self.cursor.fetchall()
         if (self.cursor.rowcount > 0):
             return "employee"
+        self.cursor.execute("Select * FROM MEMBER WHERE member_email = %s GROUP BY member_email", (email,))
+        self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            return "member"
         self.cursor.execute("Select * FROM CLIENT WHERE client_email = %s GROUP BY client_email", (email,))
         self.cursor.fetchall()
         if (self.cursor.rowcount > 0):
@@ -125,14 +178,12 @@ class Database:
         return "person"
         
 
-    # def getInfoFromEmail(self,email):
-    #     self.cursor.execute("SELECT fname, lname, email, phone_number, address FROM PERSON WHERE email = %s GROUP BY email", (email,))
-    #     results = self.cursor.fetchall()
-    #     if (self.cursor.rowcount > 0):
-    #         print(results)
-    #         for info in results[0]:
-
-                
+    def getPersonInfo(self, email):
+        self.cursor.execute("SELECT fname, lname, email, phone_number, address FROM PERSON WHERE email = %s;", (email,))
+        data = self.cursor.fetchall()
+        personArray = [data[0][0], data[0][1], data[0][2], data[0][3], data[0][4]]
+        print(personArray)
+        return personArray 
     
     # https://pynative.com/python-cursor-fetchall-fetchmany-fetchone-to-read-rows-from-table/
     def getClassInfo(self):
@@ -153,242 +204,94 @@ class Database:
             new.append(lname[0])
                 
             classArray.append(new)
-
         return classArray
+    
+    def getSupplyInfo(self):
+        self.cursor.execute("SELECT sname, supply_no, stock FROM SUPPLIES;")
+        data = self.cursor.fetchall()
+    
+        suppArray = []
+        for row in data:
+            new = []
+            new.append(row[0]) #appends the supply name
+            new.append(row[1]) #appends the supply number
+            new.append(row[2]) #appends the stock (amount)
+            
+            suppArray.append(new)
+        return suppArray
 
-    # def getEquipInfo(self):
-    #     self.cursor.execute("SELECT date, time, t_email FROM CLASS;")
-    #     data = self.cursor.fetchall()
-    #     # print(data)
-    #     classArray = []
-    #     for row in data:
-    #         self.cursor.execute("SELECT fname FROM TRAINER WHERE t_email = %s;", (row[2],))
-    #         fname = self.cursor.fetchone()
-    #         self.cursor.execute("SELECT lname FROM TRAINER WHERE t_email = %s;", (row[2],))
-    #         lname = self.cursor.fetchone()
-    #         new = []
-    #         new.append(row[0])
-    #         new.append(row[1])
-    #         new.append(row[2])
-    #         new.append(fname[0])
-    #         new.append(lname[0])
+    def getEquipInfo(self):
+        self.cursor.execute("SELECT equipment_no, cdn, branch_no FROM EQUIPMENT;")
+        data = self.cursor.fetchall()
+        # print(data)
+        equipArray = []
+        for row in data:
+            new = []
+            new.append(row[0]) #appends the equipment no
+            new.append(row[1]) #appends the date the equipment conditionh
+            new.append(row[2]) #appends the branch number of the equipment
+
+            equipArray.append(new)
+        return equipArray
+
+    def getRoomInfo(self):
+        self.cursor.execute("SELECT room_id, date, duration FROM ROOMS;")
+        data = self.cursor.fetchall()
+        
+        roomArray = []
+        for row in data:
+            new = []
+            new.append(row[0]) #appends the room number
+            new.append(row[1]) #appends the date it is booked on, if it is booked
+            new.append(row[2]) #appends the duration in which it is booked
                 
-    #         classArray.append(new)
+            roomArray.append(new)
+        return roomArray
 
-    #     return classArray
+    def addBooking(self, roomid, date, duration):
+        try:
+            insert = "INSERT INTO ROOMS(room_id, date, duration) VALUES(%s, %s, %s);"
+            values = (int(roomid), date, duration)
+            self.cursor.execute(insert,values)
+            self.connect.commit()
+            return 0
+        except Error as e:
+            print("ERROR: Something went wrong when inserting into room")
+            print(e)
+            return -1
 
-#     #delete an existing person
-#     def deletePerson(ssn):
-#         cursor.execute("DELETE FROM PERSON WHERE ssn = %s;", ssn)
-#         connect.commit()
-        
-#     #update person's last name
-#     def updatePersonName(ssn, lname):
-#         cursor.execute("UPDATE PERSON SET lname = %s WHERE ssn = %s;", lname, ssn)
-#         connect.commit()
-        
-#     #update person's phone number
-#     def updatePersonPhone(ssn, phone):
-#         cursor.execute("UPDATE PERSON SET phone_number = %s WHERE ssn = %s;", phone, ssn)
-#         connect.commit()
-        
-#     #update person's email
-#     def updatePersonEmail(ssn, email):
-#         cursor.execute("UPDATE PERSON SET email = %s WHERE ssn = %s;", email, ssn)    
-#         connect.commit()
-        
-#     #update person's address
-#     def updatePersonAddress(ssn, address):
-#         cursor.execute("UPDATE PERSON SET address = %s WHERE ssn = %s;", address, ssn)
-#         connect.commit()
-        
-#     #create a client 
-#     def createClient(ssn, id, email, phone, f, l, address):
-#         cursor.execute("INSERT INTO CLIENT(cssn, client_id, fname, lname, address, phone_number, client_email)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)", ssn, id, f, l, address, phone, email)
-#         cursor.commit()
-        
-#     def addNewClient(self,ssn, fname, lname, address, phone, email, id):
-#         cursor.execute("INSERT INTO CLIENT(cssn, client_id, fname, lname, address, phone_number, client_email)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)", ssn, id, fname, lname, address, phone, email)
-#         connect.commit()
+    def removeBooking(self, roomid, date, duration):
+        try:
+            delete = "DELETE FROM ROOMS WHERE room_id = %s AND date = %s AND duration = %s;"
+            values = (int(roomid), date, duration)
+            self.cursor.execute(delete,values)
+            self.connect.commit()
+            return 0
+        except Error as e:
+            print("ERROR: Something went wrong when inserting into room")
+            print(e)
+            return -1
 
-#     #remove a client
-#     def removeClient(ssn):
-#         cursor.execute("DELETE FROM CLIENT WHERE ssn = %s;", ssn)
-#         connect.commit()
+    def addEquip(self, equipno, cdn):
+        try:
+            insert = "INSERT INTO EQUIPMENT(equipment_no, cdn, branch_no) VALUES(%s,%s,1);"
+            values = (int(equipno),cdn)
+            self.cursor.execute(insert,values)
+            self.connect.commit()
+            return 0
+        except Error as e:
+            print("ERROR: Something went wrong when inserting into equipment")
+            print(e)
+            return -1
 
-#     def removeAdmin(ssn):
-#         cursor.execute("DELETE FROM ADMIN WHERE ssn = %s;", ssn)
-#         connect.commit()
-        
-#     def createAdmin(ssn, id, email, phone, f, l, address):
-#         cursor.execute("INSERT INTO ADMIN(assn, admin_id, admin_email, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)", ssn, id, f, l, address, phone, email)
-#         connect.commit()
-        
-#     def addNewAdmin(self,ssn, fname, lname, address, phone, email, id):
-#         cursor.execute("INSERT INTO ADMIN(assn, admin_id, admin_email, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)", ssn, id, fname, lname, address, phone, email)
-#         connect.commit()
-
-#     def removeRUser(ssn):
-#         cursor.execute("DELETE FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         connect.commit()
-        
-#     def createRUser(ssn, id, email, phone, f, l, address):
-#         cursor.execute("INSERT INTO RESTRICTED_USER(assn, admin_id, admin_email, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)", ssn, id, f, l, address, phone, email)
-#         connect.commit()
-        
-#     def addNewUser(self,ssn, fname, lname, address, phone, email, id):
-#         cursor.execute("INSERT INTO RESTRICTED_USER(rssn, r_user_id, r_user_email, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)",ssn, id, fname, lname, address, phone, email)
-#         connect.commit()
-        
-#     def createEmployee(ssn, id, email, phone, f, l, address):
-#         cursor.execute("INSERT INTO EMPLOYEE(essn, e_user_id, e_email, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s)", ssn, id, f, l, address, phone, email)
-#         connect.commit()
-        
-#     def addNewEmployee(ssn, fname, lname, address, phone, email, id):
-#         cursor.execute("INSERT INTO EMPLOYEE(essn, e_user_id, e_email, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s);", ssn, id, fname, lname, address, phone, email)
-#         connect.commit()
-        
-#     def removeEmp(ssn):
-#         cursor.execute("DELETE FROM EMPLOYEE WHERE ssn = %s;", ssn)
-#         connect.commit()
-
-#     def createOwner(ossn, owner_id, owner_email, Branch_num, f, l, address, phone_number):
-#         cursor.execute("INSERT INTO OWNER(ossn, owner_id, owner_email, Branch_num, fname, lname, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s, %s)", ossn, owner_id, owner_email, Branch_num, f, l, address, phone_number)
-#         connect.commit()
-        
-#     def removeOwner(ossn):
-#         cursor.execute("DELETE FROM OWNER WHERE ossn = %s;", ossn)
-#         connect.commit()
-        
-#     def createAssociate(ssn, id, email, phone, f, l, address, branch):
-#         cursor.execute("INSERT INTO ASSOCIATE(sssn, s_user_id, s_email, fname, lname, address, phone_number, branch_no)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s, %s);",ssn, id, f, l, address, phone, email, branch)
-#         connect.commit()
-        
-#     def deleteAssociate(ssn):
-#         cursor.execute("DELETE FROM ASSOCIATE WHERE ssn = %s;", ssn)
-#         connect.commit()
-        
-#     def createManager(mssn, m_id, m_email, branch_no, f, l, address, phone_number):
-#         cursor.execute("INSERT INTO MANAGER(mssn, m_id, m_email, branch_no, f, l, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s, %s)", mssn, m_id, m_email, branch_no, f, l, address, phone_number)
-#         connect.commit()
-
-#     def createTrainer(ssn, id, email, phone, f, l, address, branch):
-#         cursor.execute("INSERT INTO TRAINER(tssn, t_user_id, t_email, fname, lname, address, phone_number, branch_no)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s, %s);",ssn, id, f, l, address, phone, email, branch)
-#         connect.commit()
-
-#     def deleteTrainer(ssn):
-#         cursor.execute("DELETE FROM TRAINER WHERE ssn = %s;", ssn)
-#         connect.commit()
-
-#     def addClassToTrainer(class_no, tssn):
-#         cursor.execute("UPDATE TRAINER SET class_no = %s WHERE tssn = %s;", class_no, tssn)
-#         connect.commit()
-
-#     def createMember(mssn, client_id, membership_id, member_email, type, status, f, l, address, phone_number):
-#         cursor.execute("INSERT INTO MEMBER(mssn, client_id, membership_id, member_email, type, status, f, l, address, phone_number)\
-#                         VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", mssn, client_id, membership_id, member_email, type, status, f, l, address, phone_number)
-#         connect.commit()
-
-#     def updateMemberStatus(membership_id, status):
-#         cursor.execute("UPDATE MEMBER SET status = %s WHERE membership_id = %s;", status, membership_id)
-#         connect.commit()
-
-#     def updateMemberType(membership_id, type):
-#         cursor.execute("UPDATE MEMBER SET type = %s WHERE membership_id = %s;", type, membership_id)
-#         connect.commit()
-
-#     def updateScheduleAvail(day, r_user_id):
-#         cursor.execute("UPDATE WEEKLY_SCHEDULE_AVAIL SET day = %s WHERE r_user_id = %s;", day,r_user_id)
-#         connect.commit()
-
-#     def createClass(class_no, date, time, branch_no, t_id, t_email, tssn):
-#         cursor.execute("INSERT INTO CLASS(class_no, date, time, branch_no, t_id, t_email, tssn) VALUES(%s, %s, %s, %s, %s, %s, %s);", class_no, date, time, branch_no, t_id, t_email, tssn)
-#         connect.commit()
-
-#     def updateClassDate(date, class_no):
-#         cursor.execute("UPDATE CLASS SET date = %s WHERE class_no = %s;", date, class_no)
-#         connect.commit()
-
-#     def updateClassTime(time, class_no):
-#         cursor.execute("UPDATE CLASS SET time = %s WHERE class_no = %s;",time, class_no)
-#         connect.commit()
-
-#     def updateClassInstructor(tssn, t_id, t_email, class_no):
-#         cursor.execute("UPDATE CLASS SET tssn = %s, t_id = %s, t_email = %s WHERE class_no = %s;", tssn, t_id, t_email, class_no)
-#         connect.commit()
-
-#     def createRoom(room_id, date, duration):
-#         cursor.execute("INSERT INTO ROOM(room_id, date, duration) VALUES(%s, %s, %s);", room_id, date, duration)
-#         connect.commit()
-
-#     def cancelBooking(room_id, date, duration):
-#         cursor.execute("DELETE FROM ROOMS WHERE room_id = %s, date = %s, duration = %s;",room_id, date, duration )
-#         connect.commit()
-
-#     def updateEquipCond(condition, equipment_no, branch_no):
-#         cursor.execute("UPDATE EQUIPTMENT SET condition = %s WHERE equipment_no = %s AND branch_no = %s;", condition, equipment_no, branch_no)
-#         connect.commit()
-
-#     def createEquip(equipment_no, amount, condition, duration, branch_no):
-#         cursor.execute("INSERT INTO EQUIPMENT(equipment_no, amount, condition, duration, branch_no) VALUES(%s, %s, %s, %s, %s);", equipment_no, amount, condition, duration, branch_no)
-#         connect.commit()
-
-#     def updateEquipAmount(amount, equipment_no, branch_no):
-#         cursor.execute("UPDATE EQUIPMENT SET amount = %s WHERE equipment_no = %s AND branch_no = %s;", amount, equipment_no, branch_no)
-#         connect.commit()
-
-#     def createSupply(sname, supply_no, stock, branch_no):
-#         cursor.execute("INSERT INTO SUPPLY(sname, supply_no, stock, branch_no) VALUES(%s, %s, %s, %s);", sname, supply_no, stock, branch_no)
-#         connect.commit()
-
-#     def updateSupplyStock(stock, supply_no, branch_no):
-#         cursor.execute("UPDATE SUPPLIES SET stock = %s WHERE supply_no = %s AND branch_no = %s;", stock, supply_no, branch_no)
-#         connect.commit()
-
-#     def createGym(branch_no, location, o_ssn, mssn):
-#         cursor.execute("INSERT INTO SUBSCRIPTION(branch_no, location, o_ssn, mssn) VALUES(%s, %s, %s, %s);", branch_no, location, o_ssn, mssn)
-#         connect.commit()
-
-#     #create new subscription
-#     def createSubscription(login_id, name,status,branch_no):
-#         cursor.execute("INSERT INTO SUBSCRIPTION(login_id, name, status, branch_no) VALUES (%s, %s, %s, %s);",login_id, name,status,branch_no)
-#         connect.commit()
-
-#     def updateSubscriptionStatus(status, login_id, branch_no):
-#         cursor.execute("UPDATE SUBSCRIPTION SET status = %s WHERE login_id = %s AND branch_no = %s;", status, login_id, branch_no)
-#         connect.commit()
-
-#     def getRUserID(ssn):
-#         cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
-
-#     def getManagerID(ssn):
-#         cursor.execute("SELECT mssn FROM MANAGER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
-#     def getRUserID(ssn):
-#         cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
-#     def getRUserID(ssn):
-#         cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
-#     def getRUserID(ssn):
-#         cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
-#     def getRUserID(ssn):
-#         cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
-#     def getRUserID(ssn):
-#         cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE ssn = %s;", ssn)
-#         return cursor.fetchall()
+    def UpdateEquip(self, equipno, cdn):
+        try:
+            update = "UPDATE EQUIPMENT SET cdn = %s WHERE equipment_no = %s AND branch_no = 1;"
+            values = (cdn,int(equipno))
+            self.cursor.execute(update,values)
+            self.connect.commit()
+            return 0
+        except Error as e:
+            print("ERROR: Something went wrong when updating equipment")
+            print(e)
+            return -1

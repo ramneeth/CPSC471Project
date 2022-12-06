@@ -8,33 +8,141 @@
 #     size: (400,200)
 #     auto_dismiss: False
 
-<EmailPopup@Popup>:
-    title: "Email Popup"
+<ModifyEquipmentPopup>:
+    title: "Modify Equipment"
     size_hint: (None, None)
-    size: (400,200)
-    auto_dismiss: False
+    size: (400,400)
+    equipno: equipno
     FloatLayout:
         Label:
-            pos_hint: {'x': 0.028, 'center_y':0.8}
-            size_hint: 0.35,0.08
-            text: "New Email:"
+            pos_hint: {'x': 0.15, 'center_y':0.9}
+            size_hint: 0.7,0.08
+            text: "Equipment No."
         TextInput:
-            id: email
-            pos_hint: {'x': 0.1, 'center_y':0.6}
-            size_hint: 0.8, 0.25
+            id: equipno
+            pos_hint: {'x': 0.1, 'center_y':0.8}
+            size_hint: 0.8, 0.1
             multiline: False
-        Button:
-            text: "Cancel"
-            pos_hint: {"center_x":0.65,"center_y":0.15}
-            size_hint: 0.25, 0.2
-            on_release:
-                root.dismiss()
-        Button:
-            text: "Submit Changes"
-            pos_hint: {"center_x":0.35,"center_y":0.15}
-            size_hint: 0.35, 0.2
-            on_release:
-                root.dismiss()
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.6}
+            size_hint: 0.7,0.08
+            text: "Condition"
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'x':0,'center_y':0.5}
+            Button:
+                text: "Broken"
+                on_release: root.condition = "Broken"
+            Button:
+                text: "Working"
+                on_release: root.condition = "Working"
+        # TextInput:
+        #     id: date
+        #     pos_hint: {'x': 0.1, 'center_y':0.5}
+        #     size_hint: 0.8, 0.1
+        #     multiline: False
+        # Label:
+        #     pos_hint: {'x': 0.15, 'center_y':0.3}
+        #     size_hint: 0.7,0.08
+        #     text: "Duration"
+        # TextInput:
+        #     id: duration
+        #     pos_hint: {'x': 0.1, 'center_y':0.2}
+        #     size_hint: 0.8, 0.1
+        #     multiline: False
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: 0.1
+            pos_hint: {'center_x':0.5, 'center_y':0.05}
+            Button:
+                text: "Add Equipment"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.addEquipment()
+            Button:
+                text: "Update Equipment"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.updateEquipment()
+
+<ModifyBookingPopup>:
+    title: "Modify Booking"
+    size_hint: (None, None)
+    size: (400,400)
+    roomid: roomid
+    duration: duration
+    FloatLayout:
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.9}
+            size_hint: 0.7,0.08
+            text: "Room ID"
+        TextInput:
+            id: roomid
+            pos_hint: {'x': 0.1, 'center_y':0.8}
+            size_hint: 0.8, 0.1
+            multiline: False
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.6}
+            size_hint: 0.7,0.08
+            text: "Date"
+        GridLayout:
+            cols: 7
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'x':0,'center_y':0.5}
+            Button:
+                text: "Sun"
+                on_release: root.date = "Sunday"
+            Button:
+                text: "Mon"
+                on_release: root.date = "Monday"
+            Button:
+                text: "Tues"
+                on_release: root.date = "Tuesday"
+            Button:
+                text: "Wed"
+                on_release: root.date = "Wednesday"
+            Button:
+                text: "Thurs"
+                on_release: root.date = "Thursday"
+            Button:
+                text: "Fri"
+                on_release: root.date = "Friday"
+            Button:
+                text: "Sat"
+                on_release: root.date = "Saturday"
+        # TextInput:
+        #     id: date
+        #     pos_hint: {'x': 0.1, 'center_y':0.5}
+        #     size_hint: 0.8, 0.1
+        #     multiline: False
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.3}
+            size_hint: 0.7,0.08
+            text: "Duration"
+        TextInput:
+            id: duration
+            pos_hint: {'x': 0.1, 'center_y':0.2}
+            size_hint: 0.8, 0.1
+            multiline: False
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: 0.1
+            pos_hint: {'center_x':0.5, 'center_y':0.05}
+            Button:
+                text: "Add Booking"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.addBooking()
+            Button:
+                text: "Remove Booking"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.removeBooking()
 
 
 <ThreeFieldLine>:
@@ -85,221 +193,27 @@
 
 #################################### ADMIN ##########################################################################
 <AdminHomepage>:
-    # classes: classes # expose the widget
-    supply: supply
-    equipment: equipment
-    admin_email: admin_email
-    subscription: subscription
-
-    TabbedPanel:
-        size_hint: 1, 0.9
-        pos_hint: {'x': 0, 'top':0.9}
-        tab_width: root.width / 7
-        do_default_tab: False
-        TabbedPanelItem:
-            text: "Account Info"
-            text_size: self.size
-            FloatLayout:
-                GridLayout:
-                    pos_hint: {"center_x":0.5,"center_y":0.65}
-                    cols: 3
-                    rows: 1
-                    size_hint_y: 0.6
-                    padding: [0,0]
-                    GridLayout:
-                        cols: 1
-                        rows: 4
-                        size_hint_y: 0.5
-                        size_hint_x: 0.3
-                        
-                        Label:
-                            text: "Name:"
-                        Label:
-                            text: "Email:"
-                        Label:
-                            text: "Phone:"
-                        Label:
-                            text: "Home Address:"
-                    GridLayout:
-                        cols: 1
-                        rows: 4
-                        # size_hint_y: 0.5
-                        # size_hint_x: 0.3
-
-                        Label:
-                            text: "FirstName LastName"
-                        Label:
-                            text: "Email@email.com"
-                        Label:
-                            text: "111111111"
-                        Label:
-                            text: "HomeAddressGoesHere"
-
-        
-               #----------------- CHANGE MEMBERS FOR EMPLOYEE ------------------#
-        TabbedPanelItem:
-            text: "Member Control Panel"
-            text_size: self.size
-            FloatLayout:
-                Label:
-                    text: "Email of User:"
-                    pos_hint: {"center_x": 0.215, "center_y":0.775}
-                TextInput:
-                    id: admin_email
-                    font_size: (root.width**2 + root.height**2) / 14**4
-                    pos_hint: {"center_x": 0.5, "center_y":0.7}
-                    size_hint: 0.7,0.1
-                    multiline: False
-                GridLayout:
-                    cols: 4
-                    rows: 1
-                    spacing: [0.01, 0]
-                    pos_hint: {"center_x": 0.5, "center_y":0.575}
-                    size_hint: 0.7, 0.1
-                    Button:
-                        text: "Add Client"
-                        on_release: root.moveToClient()
-                    Button:
-                        text: "Remove Client"
-                    Button:
-                        text: "Add Member"
-                    Button:
-                        text: "Remove Member"
-                    Button:
-                        text: "Add Admin"
-                    Button:
-                        text: "Remove Admin"
-                    
-
-                GridLayout:
-                    cols: 1
-                    row: 1
-                    pos_hint: {"center_x": 0.5, "center_y":0.465}
-                    size_hint: 0.7, 0.1
-                    Button:
-                        text: "Display Info for User"
-
-                
-
-        #----------------- SEE SUPPLIES FOR ADMIN ------------------#
-        TabbedPanelItem:
-            text: "See Supply Status"
-            text_size: self.size
-            GridLayout:
-                cols: 1
-                rows: 2
-                GridLayout:
-                    cols: 3
-                    rows: 1
-                    size_hint_y: 0.04
-                    Label:
-                        text: "Supply No."
-                    Label:
-                        text: "Supply Name"
-                    Label:
-                        text: "Stock"
-                GridLayout:
-                    cols: 1
-                    rows: 1
-                    size_hint_y: 0.96
-                    RecycleView:
-                        id: supply
-                        viewclass: 'ThreeFieldLine'
-                        RecycleBoxLayout:
-                            default_size: None, dp(56)
-                            default_size_hint: 1, None
-                            size_hint_y: None
-                            height: self.minimum_height
-                            orientation: 'vertical'
-
-
-        #----------------- SEE EQUIPMENT FOR ADMIN ------------------#
-        TabbedPanelItem:
-            text: "See Equipment Status"
-            text_size: self.size
-            GridLayout:
-                cols: 1
-                rows: 2
-                GridLayout:
-                    cols: 3
-                    rows: 1
-                    size_hint_y: 0.04
-                    Label:
-                        text: "Equipment No."
-                    Label:
-                        text: "Amount"
-                    Label:
-                        text: "Condition"
-                GridLayout:
-                    cols: 1
-                    rows: 1
-                    size_hint_y: 0.96
-                    RecycleView:
-                        id: equipment
-                        viewclass: 'ThreeFieldLine'
-                        RecycleBoxLayout:
-                            default_size: None, dp(56)
-                            default_size_hint: 1, None
-                            size_hint_y: None
-                            height: self.minimum_height
-                            orientation: 'vertical'
-            # TextInput:
-            #     id: equip_cond
-            # Button:
-            #     text: 
-            
-        #----------------- SEE SUBSCRIPTIONS FOR ADMIN ------------------#
-        TabbedPanelItem:
-            text: "See Subscription Status"
-            text_size: self.size
-            GridLayout:
-                cols: 1
-                rows: 2
-                GridLayout:
-                    cols: 3
-                    rows: 1
-                    size_hint_y: 0.04
-                    Label:
-                        text: "Login ID"
-                    Label:
-                        text: "Name"
-                    Label:
-                        text: "Status"
-                GridLayout:
-                    cols: 1
-                    rows: 1
-                    size_hint_y: 0.96
-                    RecycleView:
-                        id: subscription
-                        viewclass: 'ThreeFieldLine'
-                        RecycleBoxLayout:
-                            default_size: None, dp(56)
-                            default_size_hint: 1, None
-                            size_hint_y: None
-                            height: self.minimum_height
-                            orientation: 'vertical'
-
-        #----------------- SEE SCHEDULE FOR ADMIN ------------------#
-        TabbedPanelItem:
-            text: "See Schedule"
-            text_size: self.size
-
-    Button:
-        text: "Logout"
-        font_size: (root.width**2 + root.height**2) / 15**4
-        pos_hint: {"x":0.002,"top":1}
-        size_hint: 0.15, 0.1
-        on_release: 
-            root.logout()
-            app.root.current = "login"
-            root.manager.transition.direction = "up"
+    Label:
+        text: "Hi"
 
 
 <EmpHomepage>:
     classes: classes # expose the widget
-    supply: supply
+    supplies: supplies
     equipment: equipment
+    rooms: rooms
+    # schedule: schedule
     client_email: client_email
+    client_fname: client_fname
+    client_lname: client_lname
+    client_demail: client_demail
+    client_phone: client_phone
+    client_addr: client_addr
+    user_fname: user_fname
+    user_lname: user_lname
+    user_email: user_email
+    user_phone: user_phone
+    user_addr: user_addr
 
     TabbedPanel:
         size_hint: 1, 0.9
@@ -318,32 +232,26 @@
                     padding: [0,0]
                     GridLayout:
                         cols: 1
-                        rows: 4
+                        rows: 5
                         size_hint_y: 0.5
                         size_hint_x: 0.3
                         
                         Label:
-                            text: "Name:"
+                            id: user_fname
+                            text: "First Name:"
                         Label:
+                            id: user_lname
+                            text: "Last Name:"
+                        Label:
+                            id: user_email
                             text: "Email:"
                         Label:
+                            id: user_phone
                             text: "Phone:"
                         Label:
+                            id: user_addr
                             text: "Home Address:"
-                    GridLayout:
-                        cols: 1
-                        rows: 4
-                        # size_hint_y: 0.5
-                        # size_hint_x: 0.3
-                        RecycleView:
-                            id: accountInfo
-                            viewClass: "FourFieldLine"
-                            RecycleBoxLayout:
-                                default_size: None, dp(56)
-                                default_size_hint: 1, None
-                                size_hint_y: None
-                                height: self.minimum_height
-                                orientation: 'vertical'
+
                             
                 Button:
                     text: "Cancel Membership (Debug)"
@@ -379,10 +287,13 @@
                         on_release: root.moveToClient()
                     Button:
                         text: "Remove Client"
+                        on_release: root.removeClient()
                     Button:
                         text: "Add Member"
+                        on_release: root.moveToMember()
                     Button:
                         text: "Remove Member"
+                        on_release: root.removeMember()
                 GridLayout:
                     cols: 1
                     row: 1
@@ -390,6 +301,28 @@
                     size_hint: 0.7, 0.1
                     Button:
                         text: "Display Info for User"
+                        on_release: root.getClientAccountInfo()
+                GridLayout:
+                    cols: 1
+                    rows: 5
+                    size_hint_y: 0.25
+                    size_hint_x: 0.5
+                    pos_hint: {"center_x": 0.5, "center_y":0.265}
+                    Label:
+                        id: client_fname
+                        text: ""
+                    Label:
+                        id: client_lname
+                        text: ""
+                    Label:
+                        id: client_demail
+                        text: ""
+                    Label:
+                        id: client_phone
+                        text: ""
+                    Label:
+                        id: client_addr
+                        text: ""
 
                 
                     
@@ -409,11 +342,11 @@
                     Label:
                         text: "Time"
                     Label:
-                        text: "Branch No."
+                        text: "Trainer E-mail."
                     Label:
-                        text: "Trainer E-mail"
+                        text: "Trainer First Name"
                     Label:
-                        text: "Trainer Name"
+                        text: "Trainer Last Name"
                 GridLayout:
                     cols: 1
                     rows: 1
@@ -450,7 +383,7 @@
                     rows: 1
                     size_hint_y: 0.96
                     RecycleView:
-                        id: supply
+                        id: supplies
                         viewclass: 'ThreeFieldLine'
                         RecycleBoxLayout:
                             default_size: None, dp(56)
@@ -466,7 +399,7 @@
             text_size: self.size
             GridLayout:
                 cols: 1
-                rows: 2
+                rows: 3
                 GridLayout:
                     cols: 3
                     rows: 1
@@ -474,9 +407,9 @@
                     Label:
                         text: "Equipment No."
                     Label:
-                        text: "Amount"
-                    Label:
                         text: "Condition"
+                    Label:
+                        text: "Branch No."
                 GridLayout:
                     cols: 1
                     rows: 1
@@ -490,6 +423,13 @@
                             size_hint_y: None
                             height: self.minimum_height
                             orientation: 'vertical'
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.1
+                    Button:
+                        text: "Modify equipment"
+                        on_release: root.modifyEquip()
             # TextInput:
             #     id: equip_cond
             # Button:
@@ -501,7 +441,7 @@
             text_size: self.size
             GridLayout:
                 cols: 1
-                rows: 2
+                rows: 3
                 GridLayout:
                     cols: 3
                     rows: 1
@@ -515,9 +455,9 @@
                 GridLayout:
                     cols: 1
                     rows: 1
-                    size_hint_y: 0.96
+                    size_hint_y: 1
                     RecycleView:
-                        id: supply
+                        id: rooms
                         viewclass: 'ThreeFieldLine'
                         RecycleBoxLayout:
                             default_size: None, dp(56)
@@ -525,29 +465,55 @@
                             size_hint_y: None
                             height: self.minimum_height
                             orientation: 'vertical'
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.1
+                    Button:
+                        text: "Modify booking"
+                        on_release: root.modifyBooking()
 
         #----------------- SEE SCHEDULE FOR EMPLOYEE ------------------#
         TabbedPanelItem:
             text: "See Schedule"
             text_size: self.size
-            TabbedPanel:
-                size_hint: 1, 0.9
-                tab_height: root.height / 7
-                do_default_tab: False
-                TabbedPanelItem:
-                    text: "Sunday"
-                TabbedPanelItem:
-                    text: "Monday"
-                TabbedPanelItem:
-                    text: "Tuesday"
-                TabbedPanelItem:
-                    text: "Wednesday"
-                TabbedPanelItem:
-                    text: "Thursday"
-                TabbedPanelItem:
-                    text: "Friday"
-                TabbedPanelItem:
-                    text: "Saturday"
+            size: root.width, root.height
+            Accordion:
+                orientation: 'horizontal'
+                AccordionItem:
+                    title: "Sunday"
+                    # Label:
+                    #     text: "Testing"
+                AccordionItem:
+                    title: "Monday"
+                AccordionItem:
+                    title: "Tuesday"
+                AccordionItem:
+                    title: "Wednesday"
+                AccordionItem:
+                    title: "Thursday"
+                AccordionItem:
+                    title: "Friday"
+                AccordionItem:
+                    title: "Saturday"
+            # TabbedPanel:
+            #     size_hint: 1, 0.9
+            #     tab_height: root.height / 7
+            #     do_default_tab: False
+            #     TabbedPanelItem:
+            #         text: "Sunday"
+            #     TabbedPanelItem:
+            #         text: "Monday"
+            #     TabbedPanelItem:
+            #         text: "Tuesday"
+            #     TabbedPanelItem:
+            #         text: "Wednesday"
+            #     TabbedPanelItem:
+            #         text: "Thursday"
+            #     TabbedPanelItem:
+            #         text: "Friday"
+            #     TabbedPanelItem:
+            #         text: "Saturday"
 
 
     Button:
@@ -562,6 +528,11 @@
 
 <ClientHomepage>:
     classes: classes # expose the widget
+    user_fname: user_fname
+    user_lname: user_lname
+    user_email: user_email
+    user_phone: user_phone
+    user_addr: user_addr
 
     TabbedPanel:
         size_hint: 1, 0.9
@@ -570,6 +541,7 @@
         do_default_tab: False
         TabbedPanelItem:
             text: "Account Info"
+            text_size: self.size
             FloatLayout:
                 GridLayout:
                     pos_hint: {"center_x":0.5,"center_y":0.65}
@@ -579,32 +551,27 @@
                     padding: [0,0]
                     GridLayout:
                         cols: 1
-                        rows: 4
+                        rows: 5
                         size_hint_y: 0.5
                         size_hint_x: 0.3
                         
                         Label:
-                            text: "Name:"
+                            id: user_fname
+                            text: "First Name:"
                         Label:
+                            id: user_lname
+                            text: "Last Name:"
+                        Label:
+                            id: user_email
                             text: "Email:"
                         Label:
+                            id: user_phone
                             text: "Phone:"
                         Label:
+                            id: user_addr
                             text: "Home Address:"
-                    GridLayout:
-                        cols: 1
-                        rows: 4
-                        # size_hint_y: 0.5
-                        # size_hint_x: 0.3
 
-                        Label:
-                            text: "FirstName LastName"
-                        Label:
-                            text: "Email@email.com"
-                        Label:
-                            text: "111111111"
-                        Label:
-                            text: "HomeAddressGoesHere"
+                            
                 Button:
                     text: "Cancel Membership (Debug)"
                     # background_color: (0.1, 0.1, 0.1, 1)
@@ -628,11 +595,11 @@
                     Label:
                         text: "Time"
                     Label:
-                        text: "Branch No."
-                    Label:
                         text: "Trainer E-mail"
                     Label:
-                        text: "Trainer Name"
+                        text: "Trainer First Name"
+                    Label:
+                        text: "Trainer Last Name"
                 GridLayout:
                     cols: 1
                     rows: 1

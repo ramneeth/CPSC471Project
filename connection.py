@@ -363,7 +363,7 @@ def getEquipment():
     return equipArray
 
 #function to retrieve all the information about the supplies in the database
-def getEquipment():
+def getSupplies():
     cursor.execute("SELECT sname, supply_no, stock FROM SUPPLIES;")
     data = cursor.fetchall()
     
@@ -379,7 +379,7 @@ def getEquipment():
     return suppArray
 
 #function to retrieve all the information about the subscriptions in the database
-def getEquipment():
+def getSubs():
     cursor.execute("SELECT login_id FROM SUBSCRIPTION;")
     data = cursor.fetchall()
     

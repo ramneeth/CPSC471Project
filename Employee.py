@@ -4,7 +4,17 @@ from Person import *
 
 class Employee(RestrictedUser):
     
-    def __init__(self, ssn, email, phone, f, l, address, password):
+    def __init__(self, database):
+        self.ssn = None
+        self.fname = None
+        self.lname = None
+        self.address = None
+        self.phone = None
+        self.email = None
+        self.password = None
+        
+        
+    def addEmployee(self, ssn, email, phone, f, l, address, password):
         self.ssn = ssn
         self.fname = f
         self.lname = l
@@ -14,6 +24,7 @@ class Employee(RestrictedUser):
         self.password = password
         createEmployee(ssn, id, email, phone, f, l, address, password)
         self.id = getEmployeeID(ssn)
+            
         
     def getEmployee(self):
         return self.ssn

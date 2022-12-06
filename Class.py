@@ -1,14 +1,26 @@
 from connection import *
 
 class Class:
-    def __init__(self, no, date, time, branch, ssn, id, email):
+    def __init__(self, database):
+        self.class_no = None
+        self.date = None
+        self.time = None
+        self.branch_no = 1
+        self.tssn = None
+        self.t_email = None
+        self.t_id = None
+        self.db = database
+        
+        
+    def addClass(self, no, date, time, ssn, id, email):
         self.class_no = no
         self.date = date
         self.time = time
-        self.branch_no = branch
         self.tssn = ssn
         self.t_email = email
-        createClass(no, date, time, branch, ssn, id, email)
+        self.t_id = id
+        createClass(no, date, time, self.branch_no, ssn, id, email)
+         
         
     def getDate(self):
         return self.date

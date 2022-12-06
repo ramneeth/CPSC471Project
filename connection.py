@@ -54,14 +54,6 @@ def updatePersonAddress(self, ssn, address):
     self.cursor.execute(sql, values)
     self.connect.commit()
 
-
-#create a client 
-def createClient(self, email):employees = self.db.getEmployees()
-    sql = "INSERT INTO CLIENT(cssn, client_id, fname, lname, address, phone_number, client_email)\
-                    VALUES(%s, %s, %s, %s, %s, %s, %s)"
-    values = (ssn, id, f, l, address, phone, email)
-    self.cursor.execute(sql, values)
-    self.connect.commit()
     
 def addNewClient(self,ssn, fname, lname, address, phone, email, id):
     sql = "INSERT INTO CLIENT(cssn, client_id, fname, lname, address, phone_number, client_email)\
@@ -77,9 +69,9 @@ def removeClient(self, ssn):
     self.cursor.execute(sql,values)
     self.connect.commit()
 
-def removeAdmin(self, ssn):
-    sql = "DELETE FROM ADMIN WHERE ssn = %s;"
-    values = (ssn)
+def removeAdmin(self, email):
+    sql = "DELETE FROM ADMIN WHERE admin_email = %s;"
+    values = (email)
     self.cursor.execute(sql, values)
     self.connect.commit()
     

@@ -423,9 +423,8 @@ def getEmployees():
         empArray.append(new)
     return empArray
     
-
-def validateLogin(user, password):
-    cursor.execute("SELECT email FROM PERSON")
-    
+def changePass(self,username, password):
+    self.cursor.execute("UPDATE PERSON SET pass = %s WHERE email = %s GROUP BY email", (password, username,))
+    connect.commit()
 
 connect.close()

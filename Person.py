@@ -51,4 +51,5 @@ class Person:
         
     def changePassword(self, password):
         self.password = password
-        changePass(password)
+        username = self.username
+        changePass(password, username)

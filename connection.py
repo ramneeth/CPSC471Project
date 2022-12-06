@@ -56,7 +56,7 @@ def updatePersonAddress(self, ssn, address):
 
 
 #create a client 
-def createClient(self, ssn, id, email, phone, f, l, address):
+def createClient(self, email):
     sql = "INSERT INTO CLIENT(cssn, client_id, fname, lname, address, phone_number, client_email)\
                     VALUES(%s, %s, %s, %s, %s, %s, %s)"
     values = (ssn, id, f, l, address, phone, email)

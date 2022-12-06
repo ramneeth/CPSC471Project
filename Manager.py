@@ -2,15 +2,19 @@ from connection import *
 from Admin import *
 
 class Manager(Admin):
-    def __init__(self, ssn, email, phone, f, l, address,branch):
-        self.ssn = ssn
-        self.fname = f
-        self.lname = l
-        self.address = address
-        self.phone = phone
-        self.email = email
-        self.branch = branch
-        createManager(ssn, email, phone, f, l, address, branch)
+    def __init__(self, database):
+        self.ssn = None
+        self.fname = None
+        self.lname = None
+        self.address = None
+        self.phone = None
+        self.email = None
+        self.branch = 1
+        self.db = database
+        
+        
+    def addManager(self, ssn, email, phone, f, l, address):
+        self.db.createManager(ssn, email, phone, f, l, address, self.branch)
         self.id = getManagerID(ssn)
         
     def getManager(self):

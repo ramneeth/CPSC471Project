@@ -22,7 +22,7 @@ class Employee(RestrictedUser):
         self.phone = phone
         self.email = email
         self.password = password
-        createEmployee(ssn, id, email, phone, f, l, address, password)
+        self.db.createEmployee(ssn, email, phone, f, l, address, password)
         self.id = getEmployeeID(ssn)
             
         

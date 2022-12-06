@@ -56,7 +56,7 @@ def updatePersonAddress(self, ssn, address):
 
 
 #create a client 
-def createClient(self, email):
+def createClient(self, email):employees = self.db.getEmployees()
     sql = "INSERT INTO CLIENT(cssn, client_id, fname, lname, address, phone_number, client_email)\
                     VALUES(%s, %s, %s, %s, %s, %s, %s)"
     values = (ssn, id, f, l, address, phone, email)
@@ -409,7 +409,7 @@ def getRooms():
 
 #function to get all the employee information to create the weekly schedule
 def getEmployees():
-    cursor.execute("SELECT fname, lname, e_mail FROM EMPLOYEES;")
+    cursor.execute("SELECT fname, lname FROM EMPLOYEES;")
     data = cursor.fetchall()
     
     empArray = []
@@ -417,8 +417,6 @@ def getEmployees():
         new = []
         new.append(row[0]) #appends the employee's first name
         new.append(row[1]) #appends the employee's last name
-        new.append(row[2]) #appends the employee's email
-        
             
         empArray.append(new)
     return empArray

@@ -682,9 +682,9 @@ class Database:
             new.append(row[0]) #append the login id
             new.append(row[1]) #append the name
             if(row[2] == 1):
-                subs.append('Active')
+                new.append('Active')
             else:
-                subs.append('Unactive')
+                new.append('Unactive')
             
             subs.append(new)
             

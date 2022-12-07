@@ -1,0 +1,59 @@
+
+class ModifySchedulePopup(Popup):
+    r_email = ObjectProperty(None)
+    date = None
+    time_slot = ObjectProperty(None)
+    pass
+
+    def addSchedule(self):
+        if (self.r_email.text == "" or self.date == None or self.time_slot.text == ""):
+            pop = Popup(title = "Modify Schedule",
+                    content = Label(text="ERROR: Please fill in all fields and select a day."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        elif (not self.r_email.text.isnumeric() or not self.time_slot.text.isnumeric()):
+            pop = Popup(title = "Modify Schedule",
+                    content = Label(text="ERROR: Invalid input."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        else:
+            result = db.addBooking(self.r_email.text,self.date,self.time_slot.text)
+            if (result == 0):
+                pop = Popup(title = "Modify Schedule",
+                    content = Label(text="Successfully scheduled."),
+                    size_hint=(None,None), size=(400,200))   
+                pop.open()
+                self.r_email.text = ""
+                self.date = None
+                self.time_slot.text = ""
+            else:
+                pop = Popup(title = "Modify Schedule",
+                    content = Label(text="Error: Something went wrong when trying to book."),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+
+    def removeSchedule(self):
+        if (self.r_email.text == "" or self.date == "" or self.time_slot.text == ""):
+            pop = Popup(title = "Modify Schedule",
+                    content = Label(text="ERROR: Please fill in all fields."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        elif (self.r_email.text.isalpha() or self.time_slot.text.isalpha()):
+            pop = Popup(title = "Modify Schedule",
+                    content = Label(text="ERROR: Invalid input."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        else:
+            result = db.removeBooking(self.r_email.text,self.date,self.time_slot.text)
+            if (result == 0):
+                pop = Popup(title = "Modify Schedule",
+                    content = Label(text="Successfully removed schedule."),
+                    size_hint=(None,None), size=(400,200))   
+                pop.open()
+                self.roomid.text = ""
+                self.duration.text = ""
+            else:
+                pop = Popup(title = "Modify Schedule",
+                    content = Label(text="Error: Something went wrong when trying to remove schedule."),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()

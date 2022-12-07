@@ -661,9 +661,9 @@ class Database:
         else:
             return -1
 
-    def createSubscription(self, login, name, status):
-        insert = ("INSERT INTO SUBSCRIPTION(login, name, status) VALUES (%s, %s, %s)")
-        values = (login,name,status,)
+    def createSubscription(self, login, name):
+        insert = ("INSERT INTO SUBSCRIPTION(login_id, name, status) VALUES (%s, %s, %s)")
+        values = (login,name,1,)
         self.cursor.execute(insert,values)
         self.connect.commit()
         results = self.cursor.fetchall()
@@ -671,3 +671,18 @@ class Database:
             return 0
         else:
             return -1
+        
+    def getSubscriptions(self):
+        self.cursor.execute("SELECT login_id, name, status FROM SUBSCRIPTIONS;")
+        data = self.cursor.fetchall()
+        subs = []
+        subs.append(data[0]) #append the login id
+        subs.append(data[1]) #append the name
+        if(data[2] == True):
+            subs.append('Active')
+        else:
+            subs.append('Unactive')
+        
+        
+        
+    

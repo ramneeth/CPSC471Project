@@ -1,16 +1,18 @@
 from ConnectionGUI import *
 
 class Subscription:
-    def __init__(self, login, name, database):
-        self.login = login
-        self.name = name
-        self.status = True
-        self.branch_no = 1
+    def __init__(self, database):
         self.db = database
-        self.db.createSubscription(login, name, self.status, self.branch_no)
         
     def getStatus(self):
         return self.status
+    
+    def addSub(self, login, name):
+        self.status = True
+        self.db.createSubscription(login, name, self.status)
+        
+    def getSubs(self):
+        return self.db.getSubscriptions()
     
     def setStatus(self, stat):
         self.status = stat

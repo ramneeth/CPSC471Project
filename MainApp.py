@@ -317,7 +317,7 @@ class ModifyBookingPopup(Popup):
                     content = Label(text="ERROR: Please fill in all fields and select a day."),
                     size_hint=(None,None), size=(400,200))
             pop.open()
-        elif (not self.roomid.text.isnumeric() or not self.duration.text.isnumeric()):
+        elif (not self.roomid.text.isnumeric() or self.duration.text.isnumeric()):
             pop = Popup(title = "Modify Booking",
                     content = Label(text="ERROR: Invalid input."),
                     size_hint=(None,None), size=(400,200))

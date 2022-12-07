@@ -110,43 +110,43 @@ class RegForm(Screen):
 class LoginForm(Screen):
     email = ObjectProperty(None)
     passw = ObjectProperty(None)
-    userType = "admin"
-    global loggedInEmail
-    loggedInEmail = "manager@ucalgary.ca"
+    userType = "ruser"
     pass
-
     def submit(self):
-        return 0
-        # if (self.email.text == "" or self.passw.text == ""):
-        #     self.invalidLogin("empty")
-        #     self.userType = None
-        #     return -1
-        # elif (self.email.text.find("@") == -1 or self.email.text.find(".") == -1 ):
-        #     self.invalidLogin("email")
-        #     self.userType = None
-        #     return -1
-        # else:
-        #     if (not person.validateLogin(self.email.text, self.passw.text)):
-        #         print("LOGIN FAILED")
-        #         self.invalidLogin("invalid")
-        #         self.userType = None
-        #         return -1
-        #     else:
-        #         usertype = person.checkUserType(self.email.text)
-        #         if (usertype == "person"):
-        #             self.invalidLogin("person")
-        #             self.userType = "person"
-        #             return -1
-        #         else:
-        #             print("SUCCESS LOGIN")
-        #             global loggedInEmail
-        #             loggedInEmail = self.email.text
-        #             self.email.text = ""
-        #             self.passw.text = ""
-        #             self.userType = usertype
-        #             return 0
-
-
+        # print("Email:", self.email.text)
+        # print("Password:", self.passw.text)
+        # return 0
+        # db.createClient("testclient@gmail.com")
+        # db.getInfoFromEmail("i.d@ucalgary.ca")
+        print(db.getClassInfo())
+        if (self.email.text == "" or self.passw.text == ""):
+            self.invalidLogin("empty")
+            self.userType = None
+            return -1
+        elif (self.email.text.find("@") == -1 or self.email.text.find(".") == -1 ):
+            self.invalidLogin("email")
+            self.userType = None
+            return -1
+        else:
+            if (not db.validateLogin(self.email.text, self.passw.text)):
+                print("LOGIN FAILED")
+                self.invalidLogin("invalid")
+                self.userType = None
+                return -1
+            else:
+                usertype = db.checkUserType(self.email.text)
+                if (usertype == "person"):
+                    self.invalidLogin("person")
+                    self.userType = "person"
+                    return -1
+                else:
+                    print("SUCCESS LOGIN")
+                    global loggedInEmail
+                    loggedInEmail = self.email.text
+                    self.email.text = ""
+                    self.passw.text = ""
+                    self.userType = usertype
+                    return 0
     def invalidLogin(self,type):
         if (type == "empty"):
             pop = Popup(title = "Login",
@@ -168,6 +168,7 @@ class LoginForm(Screen):
                     content = Label(text="ERROR: Account not yet confirmed. Visit the front desk"),
                     size_hint=(None,None), size=(400,200))
             pop.open()
+
 
 
 class ThreeFieldLine(BoxLayout):

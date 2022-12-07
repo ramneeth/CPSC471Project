@@ -9,7 +9,7 @@ class WeeklySchedule:
         self.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday','Friday', 'Saturday']
         today = date.today()
         self.week_no = today.isocalendar().week
-        self.timeSlots = ['8-10', '10-12', '12-2', '2-4', '4-6', '6-8']
+        self.timeSlots = ['6-10', '10-2', '2-6', '6-12']
         # i = 0
         # max = employees.size()
         # array = []
@@ -35,8 +35,8 @@ class WeeklySchedule:
     def getDays(self):
         return self.days
     
-    def getSchedule(self):
-        return self.schedule
+    def getSchedule(self, day):
+        return getWeeklySchedule(day) #will return an array of time slots for one day
     
     def getEmployees(self):
         return self.db.getEmployees()

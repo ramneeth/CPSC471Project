@@ -416,5 +416,65 @@ def getEmployees():
 def changePass(self,username, password):
     self.cursor.execute("UPDATE PERSON SET pass = %s WHERE email = %s GROUP BY email", (password, username,))
     connect.commit()
+    
+
+#########################TEST##############################
+
+#to test inside employee view: for day in days (which you get from WeeklySchedule.getDays()):
+                                # array = getSchedule(day)
+
+#method to get the full schedule for one day of the week
+def getWeeklySchedule(self, day):
+        
+        fullDay = []
+        
+        #get the email in the schedule for day 6-10
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = 6-10;", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM EMPLOYEE WHERE e_email = %s", (data[0],))
+        name = self.cursor.fetchall()
+        full_name = name[0] + name[1] #store the full name together
+        
+        #insert the full name into the day list
+        fullDay.append(full_name)
+        
+        #get the email in the schedule for day 10-2
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = 10-2;", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM EMPLOYEE WHERE e_email = %s", (data[0],))
+        name = self.cursor.fetchall()
+        full_name = name[0] + name[1] #store the full name together
+        
+        #insert the full name into the day list
+        fullDay.append(full_name)
+        
+        #get the email in the schedule for day 2-6
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = 2-6;", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM EMPLOYEE WHERE e_email = %s", (data[0],))
+        name = self.cursor.fetchall()
+        full_name = name[0] + name[1] #store the full name together
+        
+        #insert the full name into the day list
+        fullDay.append(full_name)
+        
+        #get the email in the schedule for day 6-12
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = 6-12;", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM EMPLOYEE WHERE e_email = %s", (data[0],))
+        name = self.cursor.fetchall()
+        full_name = name[0] + name[1] #store the full name together
+        
+        #insert the full name into the day list
+        fullDay.append(full_name)
+        
+        #return the  array for one full day
+        return fullDay
+
+
 
 connect.close()

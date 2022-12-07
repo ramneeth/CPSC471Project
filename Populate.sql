@@ -82,4 +82,39 @@ VALUES ("gym_spotify", "spotify", 1),
         ("gym_hulu", "hulu", 1), 
         ("gym_apple", "apple Music", 1);
         
-SELECT * FROM SUBSCRIPTION
+123
+
+r_user_id INT NOT NULL,
+branch_no int NOT NULL,
+time_slots varchar(20) NOT NULL,
+day_slots varchar(20) NOT NULL,
+
+INSERT INTO WEEKLY_SCHEDULE
+VALUES (1, 1, '6-10', 'Sunday'),
+        (2, 1, '10-2', 'Sunday'),
+        (2, 1, '2-6', 'Sunday'),
+        (3, 1, '6-12', 'Sunday'),
+        (2, 1, '6-10', 'Monday'),
+        (1, 1, '10-2', 'Monday'),
+        (1, 1, '2-6', 'Monday'),
+        (3, 1, '6-12', 'Monday'),
+        (3, 1, '6-10', 'Tuesday'),
+        (3, 1, '10-2', 'Tuesday'),
+        (2, 1, '2-6', 'Tuesday'),
+        (3, 1, '6-12', 'Tuesday'),
+        (3, 1, '6-10', 'Wednesday'),
+        (1, 1, '10-2', 'Wednesday'),
+        (1, 1, '2-6', 'Wednesday'),
+        (3, 1, '6-12', 'Wednesday'),
+        (1, 1, '6-10', 'Thursday'),
+        (2, 1, '10-2', 'Thursday'),
+        (2, 1, '2-6', 'Thursday'),
+        (3, 1, '6-12', 'Thursday'),
+        (1, 1, '6-10', 'Friday'),
+        (2, 1, '10-2', 'Friday'),
+        (1, 1, '2-6', 'Friday'),
+        (3, 1, '6-12', 'Friday'),
+        (1, 1, '6-10', 'Saturday'),
+        (3, 1, '10-2', 'Saturday'),
+        (2, 1, '2-6', 'Saturday'),
+        (1, 1, '6-12', 'Saturday');

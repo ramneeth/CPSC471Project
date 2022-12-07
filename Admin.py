@@ -1,14 +1,15 @@
-from connection import *
+from ConnectionGUI import *
 from Person import *
 
 class Admin(Person):
-    def __init__(self, datbase):
+    def __init__(self, database):
         self.ssn = None
         self.fname = None
         self.lname = None
         self.address = None
         self.phone = None
         self.email = None
+        self.db == database
         
     
     #get the ssn for the admin
@@ -23,9 +24,9 @@ class Admin(Person):
         self.fname = f
         self.lname = l
         self.address = address
-        createAdmin(ssn, email, phone, f, l, address)
-        self.id = getAdminID(ssn)
+        self.db.createAdmin(ssn, email, phone, f, l, address)
+        self.id = self.db.getAdminID(ssn)
         
         
     def removeA(self, email):
-        removeAdmin(email)
+        self.db.removeAdmin(email)

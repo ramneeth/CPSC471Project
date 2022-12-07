@@ -1,4 +1,4 @@
-from connection import *
+from ConnectionGUI import *
 
 class Subscription:
     def __init__(self, login, name, database):
@@ -14,4 +14,4 @@ class Subscription:
     
     def setStatus(self, stat):
         self.status = stat
-        updateSubscriptionStatus(self.status, self.login, self.branch_no)
+        self.db.updateSubscriptionStatus(self.status, self.login, self.branch_no)

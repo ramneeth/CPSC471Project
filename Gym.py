@@ -1,4 +1,4 @@
-from connection import *
+from ConnectionGUI import *
 from Subscription import *
 from Employee import *
 from Owner import *

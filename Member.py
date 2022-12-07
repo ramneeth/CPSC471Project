@@ -1,4 +1,5 @@
 from Client import *
+from ConnectionGUI import *
 
 class Member(Client):
     def __init__(self, database):
@@ -14,8 +15,3 @@ class Member(Client):
 
     def getStatus(self, memberID):
         return self.status
-        
-    def changeStatus(self, memberID, stat):
-        self.status = stat
-        updateMemberStatus(memberID, stat)
-        

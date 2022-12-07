@@ -1,3 +1,5 @@
+from ConnectionGUI import *
+
 class Equipment:
     def __init__(self, database):
         self.no = None

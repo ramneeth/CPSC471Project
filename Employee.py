@@ -1,4 +1,5 @@
 from RestrictedUser import *
+from ConnectionGUI import *
 
 class Employee(RestrictedUser):
     

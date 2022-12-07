@@ -1,4 +1,4 @@
-from connection import *
+from ConnectionGUI import *
 from Employee import *
 
 class Associate(Employee):
@@ -21,13 +21,13 @@ class Associate(Employee):
         self.lname = l
         self.address = address
         self.db.createAssociate(ssn, email, phone, f, l, address, self.branch)
-        self.id = getAssociateID(ssn)
+        self.id = self.db.getAssociateID(ssn)
     
     def getAssociate(self):
         return self.ssn
         
     def removeAssociate(self, ssn):
-        deleteAssociate(ssn)
+        self.db.deleteAssociate(ssn)
         
     def setEquipment(self, e):
         self.equipment = e

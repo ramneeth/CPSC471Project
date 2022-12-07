@@ -1,4 +1,5 @@
 from Person import *
+from ConnectionGUI import *
 
 class Client(Person):
     
@@ -16,6 +17,4 @@ class Client(Person):
     def getClient(self):
         return self.ssn
         
-    def removeC(self, ssn):
-        removeClient(ssn)
     

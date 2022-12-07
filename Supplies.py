@@ -1,3 +1,5 @@
+from ConnectionGUI import *
+
 class Supplies:
     def __init__(self, database):
         self.db = database
@@ -5,9 +7,14 @@ class Supplies:
     def getAllSupplies(self):
         results = self.db.getSupplyInfo()
         return results
+
+    def addSupply(self,no, name, stock):
+        results = self.db.addSupply(no,name,stock)
+        return results
         
-    def updateStock(branch, name, number, stock):
-        updateSupplyStock(stock, number, branch)
+    def updateStock(self, no, stock):
+        results = self.db.updateSupply(no, stock)
+        return results
     
     def getStock(self):
         return self.stock

@@ -1,4 +1,4 @@
-from connection import *
+from ConnectionGUI import *
 from Person import *
 
 class RestrictedUser(Person):
@@ -20,17 +20,17 @@ class RestrictedUser(Person):
         self.phone = phone
         self.email = email
         self.password = password
-        createRUser(ssn, id, email, phone, f, l, address, password)
-        self.id = getRUserID(ssn)
+        self.db.createRUser(ssn, id, email, phone, f, l, address, password)
+        self.id = self.db.getRUserID(ssn)
         
     def getRUser(self):
         return self.ssn
 
     def addRUser(self, person):
-        self.id = getRUserID(self.ssn)
-        addNewUser(person.ssn, person.fname, person.lname, person.address,
+        self.id = self.db.getRUserID(self.ssn)
+        self.db.addNewUser(person.ssn, person.fname, person.lname, person.address,
                     person.phone, person.email, self.id, person.password)
         
     def removeRU(self, ssn):
-        removeRUser(ssn)
+        self.db.removeRUser(ssn)
         

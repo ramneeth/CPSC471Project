@@ -1,4 +1,4 @@
-from connection import *
+from ConnectionGUI import *
 from Admin import *
 
 class Owner(Admin):
@@ -11,14 +11,12 @@ class Owner(Admin):
         self.email = "jalal.kawash@ucalgary.ca"
         self.password = "cpsc"
         self.db = database
-        self.db.createPerson(self.ssn, self.fname, self.lname, self.address, self.phone, self.email, self.password)
-        self.dbcreateOwner(self.ssn, self.email, self.phone, self.fname, self.lname, self.address, self.password)
-        self.id = getOwnerID(self.ssn)
+        results = self.db.createPerson(self.ssn, self.fname, self.lname, self.address, self.phone, self.email, self.password)
+        if (results != -1):
+            self.db.createOwner(self.email)
         
     def getowner(self):
         return self.ssn
-    
-    def removeOwn(ossn):
-        removeOwner(ossn)
+        
         
   

@@ -29,7 +29,3 @@ class Trainer(Employee):
         
     def removeTrainer(self, ssn):
         deleteTrainer(ssn)
-        
-        
-    def bookRoom(id, date, duration):
-        return True

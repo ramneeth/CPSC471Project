@@ -682,6 +682,8 @@ class Database:
             subs.append('Active')
         else:
             subs.append('Unactive')
+            
+        return subs
         
         
         

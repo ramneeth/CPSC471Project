@@ -68,7 +68,7 @@ class Database:
         else:
             return -1
 
-    def removeClient(self,email):
+    def removeClient(self, email):
         self.cursor.execute("Select client_id FROM CLIENT WHERE client_email = %s GROUP BY client_email", (email,))
         results = self.cursor.fetchall()
         if (self.cursor.rowcount > 0):
@@ -81,6 +81,16 @@ class Database:
                 return -1
         else:
             return -1
+        
+    def getClientID(self, email):
+        self.cursor.execute("SELECT client_id FROM Client WHERE email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+
+    def getClientSSN(self, email):
+        self.cursor.execute("SELECT cssn FROM CLIENT WHERE client_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
 
     def createMember(self, email):
         self.cursor.execute("Select * FROM client WHERE client_email = %s GROUP BY client_email", (email,))
@@ -144,6 +154,16 @@ class Database:
                 return -1
         else:
             return -1
+        
+    def getRUserID(self, email):
+        self.cursor.execute("SELECT r_user_id FROM RESTRICTED_USER WHERE r_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+
+    def getRUserSSN(self, email):
+        self.cursor.execute("SELECT rssn FROM RESTRICTED_USER WHERE r_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
 
     def createEmployee(self, email):
         self.cursor.execute("SELECT rssn,r_user_id,fname,lname,address,r_pass,phone_number,r_email FROM RESTRICTED_USER WHERE r_email = %s GROUP BY r_email", (email,))
@@ -212,6 +232,16 @@ class Database:
         else:
             return -1
 
+
+    def getAdminID(self, email):
+        self.cursor.execute("SELECT admin_id FROM ADMIN WHERE admin_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+    
+    def getAdminID(self, email):
+        self.cursor.execute("SELECT assn FROM ADMIN WHERE admin_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
 
     def createManager(self, email):
         self.cursor.execute("SELECT assn,fname,lname,address,admin_pass,phone_number,admin_email FROM ADMIN WHERE admin_email = %s GROUP BY admin_email", (email,))

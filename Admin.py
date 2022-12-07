@@ -10,22 +10,12 @@ class Admin(Person):
         self.phone = None
         self.email = None
         self.db == database
-        
-    
-    #get the ssn for the admin
-    def getAdmin(self):
-        return self.ssn
 
-    #add a new 
-    def addAdmin(self, ssn, email, phone, f, l, address):
-        self.ssn = ssn
-        self.email = email
-        self.phone = phone
-        self.fname = f
-        self.lname = l
-        self.address = address
-        self.db.createAdmin(ssn, email, phone, f, l, address)
-        self.id = self.db.getAdminID(ssn)
+    #add a new admin
+    def addAdmin(self, email):
+        self.db.createAdmin(email)
+        self.id = self.db.getAdminID(email)
+        self.ssn = self.db.getAdminSSN(email)
         
         
     def removeA(self, email):

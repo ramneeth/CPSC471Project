@@ -8,11 +8,105 @@
 #     size: (400,200)
 #     auto_dismiss: False
 
+<ModifySchedulePopup>:
+    title: "Modify Schedule"
+    size_hint: (None, None)
+    size: (400,400)
+    r_email: r_email
+    FloatLayout:
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.9}
+            size_hint: 0.7,0.08
+            text: "Employee E-mail"
+        TextInput:
+            id: r_email
+            pos_hint: {'x': 0.1, 'center_y':0.8}
+            size_hint: 0.8, 0.1
+            multiline: False
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.7}
+            size_hint: 0.7,0.08
+            text: "Date"
+        GridLayout:
+            cols: 7
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'x':0,'center_y':0.6}
+            Button:
+                text: "Sun"
+                on_release: root.date = "Sunday"
+            Button:
+                text: "Mon"
+                on_release: root.date = "Monday"
+            Button:
+                text: "Tues"
+                on_release: root.date = "Tuesday"
+            Button:
+                text: "Wed"
+                on_release: root.date = "Wednesday"
+            Button:
+                text: "Thurs"
+                on_release: root.date = "Thursday"
+            Button:
+                text: "Fri"
+                on_release: root.date = "Friday"
+            Button:
+                text: "Sat"
+                on_release: root.date = "Saturday"
+        # TextInput:
+        #     id: date
+        #     pos_hint: {'x': 0.1, 'center_y':0.5}
+        #     size_hint: 0.8, 0.1
+        #     multiline: False
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.5}
+            size_hint: 0.7,0.08
+            text: "Time slot"
+        # TextInput:
+        #     id: duration
+        #     pos_hint: {'x': 0.1, 'center_y':0.4}
+        #     size_hint: 0.8, 0.1
+        #     multiline: False
+        GridLayout:
+            cols: 4
+            rows: 1
+            size_hint: 1, 0.1
+            pos_hint: {'x':0,'center_y':0.4}
+            Button:
+                text: "6-10"
+                on_release: root.time_slot = "6-10"
+            Button:
+                text: "10-2"
+                on_release: root.time_slot = "10-2"
+            Button:
+                text: "2-6"
+                on_release: root.time_slot = "2-6"
+            Button:
+                text: "6-12"
+                on_release: root.time_slot = "6-12"
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: 0.1
+            pos_hint: {'center_x':0.5, 'center_y':0.05}
+            Button:
+                text: "Add Timeslot"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.addTimeSlot()
+            Button:
+                text: "Remove Timeslot"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.removeTimeSlot()
+
+
 <ModifyEquipmentPopup>:
     title: "Modify Equipment"
     size_hint: (None, None)
     size: (400,400)
     equipno: equipno
+    equipname: equipname
     FloatLayout:
         Label:
             pos_hint: {'x': 0.15, 'center_y':0.9}
@@ -24,14 +118,25 @@
             size_hint: 0.8, 0.1
             multiline: False
         Label:
-            pos_hint: {'x': 0.15, 'center_y':0.6}
+            # pos_hint: {'x': 0.15, 'center_y':0.3}
+            pos_hint: {'x': 0.15, 'center_y':0.7}
+            size_hint: 0.7,0.08
+            text: "Equipment Name (Only when adding)"
+        TextInput:
+            id: equipname
+            # pos_hint: {'x': 0.1, 'center_y':0.2}
+            pos_hint: {'x': 0.1, 'center_y':0.6}
+            size_hint: 0.8, 0.1
+            multiline: False
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.5}
             size_hint: 0.7,0.08
             text: "Condition"
         GridLayout:
             cols: 2
             rows: 1
-            size_hint: 1, 0.1
-            pos_hint: {'x':0,'center_y':0.5}
+            size_hint: 0.75, 0.1
+            pos_hint: {'center_x':0.5,'center_y':0.4}
             Button:
                 text: "Broken"
                 on_release: root.condition = "Broken"
@@ -41,15 +146,6 @@
         # TextInput:
         #     id: date
         #     pos_hint: {'x': 0.1, 'center_y':0.5}
-        #     size_hint: 0.8, 0.1
-        #     multiline: False
-        # Label:
-        #     pos_hint: {'x': 0.15, 'center_y':0.3}
-        #     size_hint: 0.7,0.08
-        #     text: "Duration"
-        # TextInput:
-        #     id: duration
-        #     pos_hint: {'x': 0.1, 'center_y':0.2}
         #     size_hint: 0.8, 0.1
         #     multiline: False
         GridLayout:
@@ -85,14 +181,14 @@
             size_hint: 0.8, 0.1
             multiline: False
         Label:
-            pos_hint: {'x': 0.15, 'center_y':0.6}
+            pos_hint: {'x': 0.15, 'center_y':0.7}
             size_hint: 0.7,0.08
             text: "Date"
         GridLayout:
             cols: 7
             rows: 1
             size_hint: 1, 0.1
-            pos_hint: {'x':0,'center_y':0.5}
+            pos_hint: {'x':0,'center_y':0.6}
             Button:
                 text: "Sun"
                 on_release: root.date = "Sunday"
@@ -120,12 +216,12 @@
         #     size_hint: 0.8, 0.1
         #     multiline: False
         Label:
-            pos_hint: {'x': 0.15, 'center_y':0.3}
+            pos_hint: {'x': 0.15, 'center_y':0.5}
             size_hint: 0.7,0.08
             text: "Duration"
         TextInput:
             id: duration
-            pos_hint: {'x': 0.1, 'center_y':0.2}
+            pos_hint: {'x': 0.1, 'center_y':0.4}
             size_hint: 0.8, 0.1
             multiline: False
         GridLayout:
@@ -193,23 +289,40 @@
 
 #################################### ADMIN ##########################################################################
 <AdminHomepage>:
-    # classes: classes # expose the widget
+    classes: classes # expose the widget
     supplies: supplies
     equipment: equipment
-    subscription: subscription
-
-
-    admin_email: admin_email
-    admin_fname: admin_fname
-    admiin_lname: admin_lname
-    admin_demail: admin_demail
-    admin_phone: admin_phone
-    admin_addr: admin_addr
+    rooms: rooms
+    schedulesun: schedulesun
+    schedulemon: schedulemon
+    scheduletues: scheduletues
+    schedulewed: schedulewed
+    schedulethurs: schedulethurs
+    schedulefri: schedulefri
+    schedulesat: schedulesat
+    # subscription: subscription
+    client_email: client_email
+    client_fname: client_fname
+    client_lname: client_lname
+    client_demail: client_demail
+    client_phone: client_phone
+    client_addr: client_addr
+    client_usertype: client_usertype
     user_fname: user_fname
     user_lname: user_lname
     user_email: user_email
     user_phone: user_phone
     user_addr: user_addr
+
+    Button:
+        text: "Logout"
+        font_size: (root.width**2 + root.height**2) / 15**4
+        pos_hint: {"x":0.002,"top":1}
+        size_hint: 0.15, 0.1
+        on_release: 
+            root.logout()
+            app.root.current = "login"
+            root.manager.transition.direction = "up"
 
     TabbedPanel:
         size_hint: 1, 0.9
@@ -247,9 +360,6 @@
                         Label:
                             id: user_addr
                             text: "Home Address:"
-                    
-
-               #----------------- CHANGE MEMBERS FOR ADMIN ------------------#
         TabbedPanelItem:
             text: "Member Control Panel"
             text_size: self.size
@@ -258,17 +368,17 @@
                     text: "Email of User:"
                     pos_hint: {"center_x": 0.215, "center_y":0.775}
                 TextInput:
-                    id: admin_email
+                    id: client_email
                     font_size: (root.width**2 + root.height**2) / 14**4
                     pos_hint: {"center_x": 0.5, "center_y":0.7}
                     size_hint: 0.7,0.1
                     multiline: False
                 GridLayout:
                     cols: 4
-                    rows: 1
+                    rows: 2
                     spacing: [0.01, 0]
-                    pos_hint: {"center_x": 0.5, "center_y":0.575}
-                    size_hint: 0.7, 0.1
+                    pos_hint: {"center_x": 0.5, "center_y":0.570}
+                    size_hint: 0.7, 0.15
                     Button:
                         text: "Add Client"
                         on_release: root.moveToClient()
@@ -282,50 +392,83 @@
                         text: "Remove Member"
                         on_release: root.removeMember()
                     Button:
-                        text: "Add Manager"
+                        text: "Add Employee"
+                        on_release: root.moveToEmployee()
+                    Button:
+                        text: "Remove Employee"
+                        on_release: root.removeEmployee()
+                    Button:
+                        text: "Add Admin"
                         on_release: root.moveToAdmin()
                     Button:
-                        text: "Remove Manager"
-                    Button:
-                        text: "Add Owner"
-                    Button:
-                        text: "Remove Owner"
-
-                    
-
+                        text: "Remove Admin"
+                        on_release: root.removeAdmin()
                 GridLayout:
                     cols: 1
-                    row: 1
-                    pos_hint: {"center_x": 0.5, "center_y":0.465}
+                    rows: 1
+                    pos_hint: {"center_x": 0.5, "center_y":0.445}
                     size_hint: 0.7, 0.1
                     Button:
                         text: "Display Info for User"
-                        on_release: root.getAdminAccountInfo()
-
+                        on_release: root.getClientAccountInfo()
                 GridLayout:
                     cols: 1
-                    rows: 5
+                    rows: 6
                     size_hint_y: 0.25
                     size_hint_x: 0.5
-                    pos_hint: {"center_x": 0.5, "center_y":0.265}
+                    pos_hint: {"center_x": 0.5, "center_y":0.245}
                     Label:
-                        id: admin_fname
+                        id: client_fname
                         text: ""
                     Label:
-                        id: admin_lname
+                        id: client_lname
                         text: ""
                     Label:
-                        id: admin_demail
+                        id: client_demail
                         text: ""
                     Label:
-                        id: admin_phone
+                        id: client_phone
                         text: ""
                     Label:
-                        id: admin_addr
+                        id: client_addr
+                        text: ""
+                    Label:
+                        id: client_usertype
                         text: ""
 
-
-                
+        TabbedPanelItem:
+            text: "See Classes"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 5
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Date"
+                    Label:
+                        text: "Time"
+                    Label:
+                        text: "Trainer E-mail."
+                    Label:
+                        text: "Trainer First Name"
+                    Label:
+                        text: "Trainer Last Name"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: classes
+                        viewclass: 'FiveFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
 
         #----------------- SEE SUPPLIES FOR ADMIN ------------------#
         TabbedPanelItem:
@@ -333,7 +476,7 @@
             text_size: self.size
             GridLayout:
                 cols: 1
-                rows: 2
+                rows: 3
                 GridLayout:
                     cols: 3
                     rows: 1
@@ -357,6 +500,13 @@
                             size_hint_y: None
                             height: self.minimum_height
                             orientation: 'vertical'
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.1
+                    Button:
+                        text: "Modify Supplies"
+                        # on_release: root.modifyEquip()
 
 
         #----------------- SEE EQUIPMENT FOR ADMIN ------------------#
@@ -365,7 +515,7 @@
             text_size: self.size
             GridLayout:
                 cols: 1
-                rows: 2
+                rows: 3
                 GridLayout:
                     cols: 3
                     rows: 1
@@ -373,7 +523,7 @@
                     Label:
                         text: "Equipment No."
                     Label:
-                        text: "Amount"
+                        text: "Equipment Name"
                     Label:
                         text: "Condition"
                 GridLayout:
@@ -389,34 +539,41 @@
                             size_hint_y: None
                             height: self.minimum_height
                             orientation: 'vertical'
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.1
+                    Button:
+                        text: "Modify Equipment"
+                        on_release: root.modifyEquip()
             # TextInput:
             #     id: equip_cond
             # Button:
             #     text: 
             
-        #----------------- SEE SUBSCRIPTIONS FOR ADMIN ------------------#
+        #----------------- SEE ROOMS FOR ADMIN ------------------#
         TabbedPanelItem:
-            text: "See Subscription Status"
+            text: "See Room Status"
             text_size: self.size
             GridLayout:
                 cols: 1
-                rows: 2
+                rows: 3
                 GridLayout:
                     cols: 3
                     rows: 1
                     size_hint_y: 0.04
                     Label:
-                        text: "Login ID"
+                        text: "Room ID"
                     Label:
-                        text: "Name"
+                        text: "Date"
                     Label:
-                        text: "Status"
+                        text: "Duration"
                 GridLayout:
                     cols: 1
                     rows: 1
-                    size_hint_y: 0.96
+                    size_hint_y: 1
                     RecycleView:
-                        id: subscription
+                        id: rooms
                         viewclass: 'ThreeFieldLine'
                         RecycleBoxLayout:
                             default_size: None, dp(56)
@@ -424,29 +581,242 @@
                             size_hint_y: None
                             height: self.minimum_height
                             orientation: 'vertical'
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.1
+                    Button:
+                        text: "Modify booking"
+                        on_release: root.modifyBooking()
 
         #----------------- SEE SCHEDULE FOR ADMIN ------------------#
         TabbedPanelItem:
             text: "See Schedule"
             text_size: self.size
+            size: root.width, root.height
+            GridLayout:
+                cols: 1
+                rows: 2
+                Accordion:
+                    orientation: 'horizontal'
+                    size_hint_y: 1
+                    AccordionItem:
+                        title: "Sunday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: schedulesun
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
 
-    Button:
-        text: "Logout"
-        font_size: (root.width**2 + root.height**2) / 15**4
-        pos_hint: {"x":0.002,"top":1}
-        size_hint: 0.15, 0.1
-        on_release: 
-            root.logout()
-            app.root.current = "login"
-            root.manager.transition.direction = "up"
-
+                    AccordionItem:
+                        title: "Monday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: schedulemon
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
+                    AccordionItem:
+                        title: "Tuesday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: scheduletues
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
+                    AccordionItem:
+                        title: "Wednesday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: schedulewed
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
+                    AccordionItem:
+                        title: "Thursday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: schedulethurs
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
+                    AccordionItem:
+                        title: "Friday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: schedulefri
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
+                    AccordionItem:
+                        title: "Saturday"
+                        GridLayout:
+                            cols: 1
+                            rows: 2
+                            GridLayout:
+                                cols: 3
+                                rows: 1
+                                size_hint_y: 0.04
+                                Label:
+                                    text: "Time slot"
+                                Label:
+                                    text: "Employee Name"
+                                Label:
+                                    text: "Employee Email"
+                            GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint_y: 1
+                                RecycleView:
+                                    id: schedulesat
+                                    viewclass: 'ThreeFieldLine'
+                                    RecycleBoxLayout:
+                                        default_size: None, dp(56)
+                                        default_size_hint: 1, None
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        orientation: 'vertical'
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.1
+                    Button:
+                        text: "Modify Schedule"
+                        on_release: root.modifySchedule()
 
 <EmpHomepage>:
     classes: classes # expose the widget
     supplies: supplies
     equipment: equipment
     rooms: rooms
-    # schedule: schedule
+    schedulesun: schedulesun
+    schedulemon: schedulemon
+    scheduletues: scheduletues
+    schedulewed: schedulewed
+    schedulethurs: schedulethurs
+    schedulefri: schedulefri
+    schedulesat: schedulesat
     client_email: client_email
     client_fname: client_fname
     client_lname: client_lname
@@ -497,13 +867,13 @@
                             text: "Home Address:"
 
                             
-                Button:
-                    text: "Cancel Membership (Debug)"
-                    # background_color: (0.1, 0.1, 0.1, 1)
-                    font_size: (root.width**2 + root.height**2) / 15**4
-                    pos_hint: {"center_x":0.5,"center_y":0.1}
-                    size_hint: 0.35, 0.1
-                    on_release: Factory.EmailPopup().open()
+                # Button:
+                #     text: "Cancel Membership (Debug)"
+                #     # background_color: (0.1, 0.1, 0.1, 1)
+                #     font_size: (root.width**2 + root.height**2) / 15**4
+                #     pos_hint: {"center_x":0.5,"center_y":0.1}
+                #     size_hint: 0.35, 0.1
+                #     on_release: Factory.EmailPopup().open()
 
         
         #----------------- CHANGE MEMBERS FOR EMPLOYEE ------------------#
@@ -651,9 +1021,9 @@
                     Label:
                         text: "Equipment No."
                     Label:
-                        text: "Condition"
+                        text: "Equipment Name"
                     Label:
-                        text: "Branch No."
+                        text: "Condition"
                 GridLayout:
                     cols: 1
                     rows: 1
@@ -726,38 +1096,201 @@
                 orientation: 'horizontal'
                 AccordionItem:
                     title: "Sunday"
-                    # Label:
-                    #     text: "Testing"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: schedulesun
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
+
                 AccordionItem:
                     title: "Monday"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: schedulemon
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
                 AccordionItem:
                     title: "Tuesday"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: scheduletues
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
                 AccordionItem:
                     title: "Wednesday"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: schedulewed
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
                 AccordionItem:
                     title: "Thursday"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: schedulethurs
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
                 AccordionItem:
                     title: "Friday"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: schedulefri
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
                 AccordionItem:
                     title: "Saturday"
-            # TabbedPanel:
-            #     size_hint: 1, 0.9
-            #     tab_height: root.height / 7
-            #     do_default_tab: False
-            #     TabbedPanelItem:
-            #         text: "Sunday"
-            #     TabbedPanelItem:
-            #         text: "Monday"
-            #     TabbedPanelItem:
-            #         text: "Tuesday"
-            #     TabbedPanelItem:
-            #         text: "Wednesday"
-            #     TabbedPanelItem:
-            #         text: "Thursday"
-            #     TabbedPanelItem:
-            #         text: "Friday"
-            #     TabbedPanelItem:
-            #         text: "Saturday"
+                    GridLayout:
+                        cols: 1
+                        rows: 2
+                        GridLayout:
+                            cols: 3
+                            rows: 1
+                            size_hint_y: 0.04
+                            Label:
+                                text: "Time slot"
+                            Label:
+                                text: "Employee Name"
+                            Label:
+                                text: "Employee Email"
+                        GridLayout:
+                            cols: 1
+                            rows: 1
+                            size_hint_y: 1
+                            RecycleView:
+                                id: schedulesat
+                                viewclass: 'ThreeFieldLine'
+                                RecycleBoxLayout:
+                                    default_size: None, dp(56)
+                                    default_size_hint: 1, None
+                                    size_hint_y: None
+                                    height: self.minimum_height
+                                    orientation: 'vertical'
 
 
     Button:

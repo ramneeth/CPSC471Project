@@ -41,7 +41,7 @@ class Database:
 # create an new person in the Person table
     def createPerson(self, ssn, f, l, address, passw, phone, email):
         insert = "INSERT INTO PERSON(ssn, fname, lname, address, pass, phone_number, email) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        values =(ssn, f, l, address, passw, int(phone), email)
+        values =(ssn, f, l, address, passw, phone, email)
         self.cursor.execute(insert, values)
         self.connect.commit()
 
@@ -109,20 +109,140 @@ class Database:
             return -1
 
     def createRUser(self, email):
-        results = self.getPerson(email)
+        self.cursor.execute("Select * FROM PERSON WHERE email = %s GROUP BY email", (email,))
+        results = self.cursor.fetchall()
         if (self.cursor.rowcount > 0):
+            # print(results)
             try:
-                sql = "INSERT INTO RESTRICTED_USER(rssn, fname, lname, address, r_pass, phone_number, r_email)\
-                                VALUES(%s, %s, %s, %s, %s, %s, %s)"
+                insert = "INSERT INTO RESTRICTED_USER (rssn, fname, lname, address, r_pass, phone_number, r_email) VALUES (%s, %s, %s, %s, %s, %s, %s)"
                 values = results[0]
-                self.cursor.execute(sql, values)
+                self.cursor.execute(insert, values)
                 self.connect.commit()
                 return 0
             except Error as E:
-                print("Error occured while inserting into Restricted_User.")
+                print("Error occured while inserting into restricted user.")
+                print(E)
                 return -1
         else:
             return -1
+        
+    def removeRUser(self, email):
+        self.cursor.execute("Select r_email FROM RESTRICTED_USER WHERE r_email = %s GROUP BY r_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            try:
+                self.cursor.execute("DELETE FROM RESTRICTED_USER WHERE r_email = %s;", results[0])
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while deleting from restricted user")
+                return -1
+        else:
+            return -1
+
+    def createEmployee(self, email):
+        self.cursor.execute("SELECT rssn,r_user_id,fname,lname,address,r_pass,phone_number,r_email FROM RESTRICTED_USER WHERE r_email = %s GROUP BY r_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO EMPLOYEE (essn, e_user_id,fname, lname, address, e_pass, phone_number, e_email,branch_no) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,1)"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into employee.")
+                print(E)
+                return -1
+        else:
+            return -1
+
+    def removeEmployee(self, email):
+        self.cursor.execute("Select e_user_id FROM EMPLOYEE WHERE e_email = %s GROUP BY e_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            try:
+                self.cursor.execute("DELETE FROM EMPLOYEE WHERE e_user_id = %s;", results[0])
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while deleting from employee")
+                print(E)
+                return -1
+        else:
+            return -1
+
+
+    def createAdmin(self, email):
+        self.cursor.execute("Select * FROM PERSON WHERE email = %s GROUP BY email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO ADMIN (assn, fname, lname, address, admin_pass, phone_number, admin_email) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into admin.")
+                print(E)
+                return -1
+        else:
+            return -1
+
+    def removeAdmin(self, email):
+        self.cursor.execute("Select admin_id FROM ADMIN WHERE admin_email = %s GROUP BY admin_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            try:
+                self.cursor.execute("DELETE FROM ADMIN WHERE admin_id = %s;", results[0])
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while deleting from admin")
+                print(E)
+                return -1
+        else:
+            return -1
+
+
+    def createManager(self, email):
+        self.cursor.execute("SELECT assn,fname,lname,address,admin_pass,phone_number,admin_email FROM ADMIN WHERE admin_email = %s GROUP BY admin_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO MANAGER (mssn, fname, lname, address, m_pass, phone_number, m_email,branch_no) VALUES (%s, %s, %s, %s, %s, %s, %s,1 )"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into manager.")
+                print(E)
+                return -1
+        else:
+            return -1
+
+    def removeManager(self, email):
+        self.cursor.execute("Select m_id FROM MANAGER WHERE m_email = %s GROUP BY m_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            try:
+                self.cursor.execute("DELETE FROM MANAGER WHERE m_id = %s;", results[0])
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while deleting from manager")
+                print(E)
+                return -1
+        else:
+            return -1
+
+    
+
 
 
     def getPerson(self, email):
@@ -181,9 +301,15 @@ class Database:
     def getPersonInfo(self, email):
         self.cursor.execute("SELECT fname, lname, email, phone_number, address FROM PERSON WHERE email = %s;", (email,))
         data = self.cursor.fetchall()
-        personArray = [data[0][0], data[0][1], data[0][2], data[0][3], data[0][4]]
-        print(personArray)
-        return personArray 
+        try:
+            personArray = [data[0][0], data[0][1], data[0][2], data[0][3], data[0][4]]
+            userType = self.checkUserType(email)
+            personArray.append(userType)
+            return personArray 
+            # print(personArray)
+        except Error as e:
+            print("ERROR: Something went wrong when getting this person's info")
+            return -1
     
     # https://pynative.com/python-cursor-fetchall-fetchmany-fetchone-to-read-rows-from-table/
     def getClassInfo(self):
@@ -221,15 +347,15 @@ class Database:
         return suppArray
 
     def getEquipInfo(self):
-        self.cursor.execute("SELECT equipment_no, cdn, branch_no FROM EQUIPMENT;")
+        self.cursor.execute("SELECT equipment_no, equipment_name, cdn FROM EQUIPMENT;")
         data = self.cursor.fetchall()
         # print(data)
         equipArray = []
         for row in data:
             new = []
             new.append(row[0]) #appends the equipment no
-            new.append(row[1]) #appends the date the equipment conditionh
-            new.append(row[2]) #appends the branch number of the equipment
+            new.append(row[1]) #appends the date the equipment name
+            new.append(row[2]) #appends the condition
 
             equipArray.append(new)
         return equipArray
@@ -272,10 +398,10 @@ class Database:
             print(e)
             return -1
 
-    def addEquip(self, equipno, cdn):
+    def addEquip(self, equipno, equipname, cdn, branch_no):
         try:
-            insert = "INSERT INTO EQUIPMENT(equipment_no, cdn, branch_no) VALUES(%s,%s,1);"
-            values = (int(equipno),cdn)
+            insert = "INSERT INTO EQUIPMENT(equipment_no, equipment_name, cdn, branch_no) VALUES(%s,%s,%s,%s);"
+            values = (int(equipno),equipname,cdn,branch_no)
             self.cursor.execute(insert,values)
             self.connect.commit()
             return 0
@@ -292,6 +418,89 @@ class Database:
             self.connect.commit()
             return 0
         except Error as e:
-            print("ERROR: Somethisng went wrong when updating equipment")
+            print("ERROR: Something went wrong when updating equipment")
             print(e)
+            return -1
+
+    
+    def getWeeklySchedule(self, day):
+        
+        fullDay = []
+        
+        #get the email in the schedule for day 6-10
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = '6-10';", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM RESTRICTED_USER WHERE r_email = %s", data[0])
+        name = self.cursor.fetchall()
+        full_name = name[0][0] + " " + name[0][1] #store the full name together
+        
+        #insert the full name into the day list
+        timeDay = ["6-10",full_name,data[0][0]]
+        fullDay.append(timeDay)
+        
+        #get the email in the schedule for day 10-2
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = '10-2';", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM RESTRICTED_USER WHERE r_email = %s", data[0])
+        name = self.cursor.fetchall()
+        full_name = name[0][0] + " " + name[0][1] #store the full name together
+        
+        #insert the full name into the day list
+        timeDay = ["10-2",full_name,data[0][0]]
+        fullDay.append(timeDay)
+        
+        #get the email in the schedule for day 2-6
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = '2-6';", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM RESTRICTED_USER WHERE r_email = %s", data[0])
+        name = self.cursor.fetchall()
+        full_name = name[0][0] + " " + name[0][1] #store the full name together
+        
+        #insert the full name into the day list
+        timeDay = ["2-6",full_name,data[0][0]]
+        fullDay.append(timeDay)
+        
+        #get the email in the schedule for day 6-12
+        self.cursor.execute("SELECT r_email FROM WEEKLY_SCHEDULE WHERE day_slots = %s AND time_slots = '6-12';", (day,))
+        data = self.cursor.fetchall()
+        
+        self.cursor.execute("SELECT fname, lname FROM RESTRICTED_USER WHERE r_email = %s", data[0])
+        name = self.cursor.fetchall()
+        full_name = name[0][0] + " " + name[0][1] #store the full name together
+        
+        #insert the full name into the day list
+        timeDay = ["6-12",full_name,data[0][0]]
+        fullDay.append(timeDay)
+        
+        #return the  array for one full day
+        #[6-10,10-2,2-6,6-12]
+        return fullDay
+
+
+    def addTimeSlot(self, email, day, timeslot):
+        try:
+            insert = "INSERT INTO WEEKLY_SCHEDULE(r_email, time_slots, day_slots, branch_no) VALUES(%s,%s,%s,1);"
+            values = (email,timeslot,day,)
+            self.cursor.execute(insert,values)
+            self.connect.commit()
+            return 0
+        except Error as E:
+            print("Error: Something went wrong when inserting into schedule")
+            print(E)
+            return -1
+
+
+    def removeTimeSlot(self, email, day, timeslot):
+        try:
+            delete = "DELETE FROM WEEKLY_SCHEDULE WHERE r_email = %s AND time_slots = %s AND day_slots = %s;"
+            values = (email, timeslot, day,)
+            self.cursor.execute(delete,values)
+            self.connect.commit()
+            return 0
+        except Error as E:
+            print("Error: Something went wrong when removing from schedule")
+            print(E)
             return -1

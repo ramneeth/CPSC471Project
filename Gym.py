@@ -10,27 +10,17 @@ class Gym:
         self.location = None
         self.manager = None
         self.owner = None
+        self.db = database
         
         
     def addGym(self, loc, manager, owner):
         self.location = loc
         self.manager = manager
         self.owner = owner
-        self.db.createGym(self.branch, loc, owner, manager)
+        resutls = self.db.createGym(self.branch, loc, owner, manager)
         
         
     def addSubscription(self, login, name):
         self.sub = Subscription(login, name, self.branch_no)
-        createSubscription(login, name, True, self.branch_no)
+        self.db.createSubscription(login, name, True)
         
-    def changeOwner(self, owner):
-        self.owner = owner
-        
-    def getOwner(self):
-        return self.owner.getOwner()
-    
-    def getLocation(self):
-        return self.location
-    
-    def getSubscriptions(self):
-        return self.sub

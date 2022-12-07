@@ -197,7 +197,74 @@ class Database:
                 return -1
         else:
             return -1
+        
+    def getEmpID(self, email):
+        self.cursor.execute("SELECT e_user_id FROM EMPLOYEE WHERE e_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
 
+    def getEmpSSN(self, email):
+        self.cursor.execute("SELECT essn FROM RESTRICTED_USER WHERE r_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+
+
+    def createAssociate(self, email):
+        self.cursor.execute("Select * FROM PERSON WHERE email = %s GROUP BY email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO ASSOCIATE (sssn, fname, lname, address, s_pass, phone_number, s_email) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into associate.")
+                print(E)
+                return -1
+        else:
+            return -1
+        
+    def getAssociateID(self, email):
+        self.cursor.execute("SELECT s_user_id FROM ASSOCIATE WHERE s_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+
+    def getAssociateSSN(self, email):
+        self.cursor.execute("SELECT sssn FROM ASSOCIATE WHERE s_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+    
+    
+    def createTrainer(self, email):
+        self.cursor.execute("SELECT rssn,r_user_id,fname,lname,address,r_pass,phone_number,r_email FROM RESTRICTED_USER WHERE r_email = %s GROUP BY r_email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO TRAINER (tssn, t_user_id,fname, lname, address, t_pass, phone_number, t_email,branch_no) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,1)"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into trainer.")
+                print(E)
+                return -1
+        else:
+            return -1
+        
+    def getTrainerID(self, email):
+        self.cursor.execute("SELECT t_user_id FROM TRAINER WHERE t_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
+
+    def getTrainerSSN(self, email):
+        self.cursor.execute("SELECT tssn FROM TRAINER WHERE t_email = %s;", (email,))
+        results = self.cursor.fetchall()
+        return results[0]
 
     def createAdmin(self, email):
         self.cursor.execute("Select * FROM PERSON WHERE email = %s GROUP BY email", (email,))
@@ -460,7 +527,7 @@ class Database:
 
     def addEquip(self, equipno, equipname, cdn, branch_no):
         try:
-            insert = "INSERT INTO EQUIPMENT(equipment_no, equipment_name, cdn, branch_no) VALUES(%s,%s,%s,%s);"
+            insert = "INSERT INTO EQUIPMENT(equipment_no, equipment_name, amount, cdn, branch_no) VALUES(%s,%s, 1,%s,%s);"
             values = (int(equipno),equipname,cdn,branch_no)
             self.cursor.execute(insert,values)
             self.connect.commit()
@@ -579,5 +646,28 @@ class Database:
             except Error as E:
                 print("Error occured while inserting into owner.")
                 return -1
+        else:
+            return -1
+        
+        
+    def createGym(self, loc, manager, owner):
+        insert = ("INSERT INTO GYM(branch_no, location, ossn, mssn) VALUES (%s, %s, %s, %s)")
+        values = (loc,manager,owner,)
+        self.cursor.execute(insert,values)
+        self.connect.commit()
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            return 0
+        else:
+            return -1
+
+    def createSubscription(self, login, name, status):
+        insert = ("INSERT INTO SUBSCRIPTION(login, name, status) VALUES (%s, %s, %s)")
+        values = (login,name,status,)
+        self.cursor.execute(insert,values)
+        self.connect.commit()
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            return 0
         else:
             return -1

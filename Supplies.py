@@ -16,8 +16,3 @@ class Supplies:
         results = self.db.updateSupply(no, stock)
         return results
     
-    def getStock(self):
-        return self.stock
-    
-    def getName(self):
-        return self.sname

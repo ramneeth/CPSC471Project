@@ -14,19 +14,10 @@ class Equipment:
         return results
         
     def createEquipment(self, no, name, condition):
-        result = self.db.createEquip(no, name, condition, self.branch_no)
+        result = self.db.addEquip(no, name, condition, self.branch)
         return result
         
-    def updateCondition(self, no, condition):
-        result = self.db.updateEquipCond(no, condition)
+    def updateEquip(self, no, condition):
+        result = self.db.updateEquip(no, condition)
         return result
         
-    def addAmount(self):
-        self.db.updateEquipAmount(self.no)
-        self.amount = self.amount +1
-    
-    def getAmount(self):
-        return self.amount
-    
-    def getCondition(self):
-        return self.condition

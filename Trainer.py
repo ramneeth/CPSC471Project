@@ -1,31 +1,18 @@
-from connection import *
+from ConnectionGUI import *
 from Employee import *
 from Room import *
 
 class Trainer(Employee):
     def __init__(self, database):
         self.ssn = None
-        self.fname = None
-        self.lname = None
-        self.address = None
-        self.phone = None
-        self.email = None
-        self.branch = 1
+        self.ssn = None
+        self.id = None
         self.db = database
   
-    def addTrainr(self, ssn, email, phone, f, l, address):
-        self.ssn = ssn
-        self.fname = f
-        self.lname = l
-        self.address = address
-        self.phone = phone
+    def addTrainr(self,email):
         self.email = email
-        createAssociate(ssn, id, email, phone, f, l, address, self.branch)
-        self.id = getTrainerID(ssn)
+        self.db.createTrainer(email)
+        self.id = self.getTrainerID(email)
+        self.ssn = self.db.getTrainerSSN(email)
         
-        
-    def getTrainer(self):
-        return self.ssn
-        
-    def removeTrainer(self, ssn):
-        deleteTrainer(ssn)
+

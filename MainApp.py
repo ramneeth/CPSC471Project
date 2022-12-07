@@ -16,6 +16,7 @@ from Client import Client
 from Member import Member
 from Employee import Employee
 from Manager import Manager
+from Owner import Owner
 from WeeklySchedule import WeeklySchedule
 
 db = Database()
@@ -110,15 +111,13 @@ class RegForm(Screen):
 class LoginForm(Screen):
     email = ObjectProperty(None)
     passw = ObjectProperty(None)
-    userType = "ruser"
+    # userType = "admin"
+    # global loggedInEmail
+    # loggedInEmail = "manager@ucalgary.ca"
     pass
+
     def submit(self):
-        # print("Email:", self.email.text)
-        # print("Password:", self.passw.text)
         # return 0
-        # db.createClient("testclient@gmail.com")
-        # db.getInfoFromEmail("i.d@ucalgary.ca")
-        print(db.getClassInfo())
         if (self.email.text == "" or self.passw.text == ""):
             self.invalidLogin("empty")
             self.userType = None
@@ -128,13 +127,13 @@ class LoginForm(Screen):
             self.userType = None
             return -1
         else:
-            if (not db.validateLogin(self.email.text, self.passw.text)):
+            if (not person.validateLogin(self.email.text, self.passw.text)):
                 print("LOGIN FAILED")
                 self.invalidLogin("invalid")
                 self.userType = None
                 return -1
             else:
-                usertype = db.checkUserType(self.email.text)
+                usertype = person.checkUserType(self.email.text)
                 if (usertype == "person"):
                     self.invalidLogin("person")
                     self.userType = "person"
@@ -147,6 +146,8 @@ class LoginForm(Screen):
                     self.passw.text = ""
                     self.userType = usertype
                     return 0
+
+
     def invalidLogin(self,type):
         if (type == "empty"):
             pop = Popup(title = "Login",
@@ -168,7 +169,6 @@ class LoginForm(Screen):
                     content = Label(text="ERROR: Account not yet confirmed. Visit the front desk"),
                     size_hint=(None,None), size=(400,200))
             pop.open()
-
 
 
 class ThreeFieldLine(BoxLayout):
@@ -246,7 +246,68 @@ class ModifySchedulePopup(Popup):
                 pop.open()
 
 class ModifySuppliesPopup(Popup):
+    supplyno = ObjectProperty(None)
+    supplyname = ObjectProperty(None)
+    stock = ObjectProperty(None)
     pass
+
+    def addSupply(self):
+        if (self.supplyno.text == "" or self.supplyname.text == "" or self.stock == ""):
+            pop = Popup(title = "Modify Supplies",
+                    content = Label(text="ERROR: Please fill in all fields."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        elif (not self.supplyno.text.isnumeric() or not self.stock.text.isnumeric()):
+            pop = Popup(title = "Modify Supplies",
+                    content = Label(text="ERROR: Invalid input."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        else:
+            result = supplies.addSupply(self.supplyno.text,self.supplyname.text,self.stock.text)
+            if (result == 0):
+                pop = Popup(title = "Modify Supplies",
+                    content = Label(text="Successfully created supplies."),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+                self.supplyno.text = ""
+                self.supplyname.text = ""
+                self.stock.text = ""
+            else:
+                pop = Popup(title = "Modify Supplies",
+                    content = Label(text="Error: Something went wrong when trying to create supplies."),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+
+    def updateSupply(self):
+        if (self.supplyno.text == "" or self.stock == ""):
+            pop = Popup(title = "Modify Supplies",
+                    content = Label(text="ERROR: Please fill in all fields."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        elif (not self.supplyno.text.isnumeric() or not self.stock.text.isnumeric()):
+            pop = Popup(title = "Modify Supplies",
+                    content = Label(text="ERROR: Invalid input."),
+                    size_hint=(None,None), size=(400,200))
+            pop.open()
+        else:
+            result = supplies.updateStock(self.supplyno.text,self.stock.text)
+            if (result == 0):
+                pop = Popup(title = "Modify Supplies",
+                    content = Label(text="Successfully updated supply."),
+                    size_hint=(None,None), size=(400,200))   
+                pop.open()
+                self.supplyno.text = ""
+                self.supplyname.text = ""
+                self.stock.text = ""
+            else:
+                pop = Popup(title = "Modify Equipment",
+                    content = Label(text="Error: Something went wrong when trying to update supply."),
+                    size_hint=(None,None), size=(400,200))
+                pop.open()
+
+
+
+        
 
 class ModifyEquipmentPopup(Popup):
     equipno = ObjectProperty(None)
@@ -291,7 +352,7 @@ class ModifyEquipmentPopup(Popup):
                     size_hint=(None,None), size=(400,200))
             pop.open()
         else:
-            result = equipment.UpdateConditon(self.equipno.text,self.condition)
+            result = equipment.updateCondition(self.equipno.text,self.condition)
             if (result == 0):
                 pop = Popup(title = "Modify Equipment",
                     content = Label(text="Successfully updated equipment."),
@@ -318,7 +379,7 @@ class ModifyBookingPopup(Popup):
                     content = Label(text="ERROR: Please fill in all fields and select a day."),
                     size_hint=(None,None), size=(400,200))
             pop.open()
-        elif (not self.roomid.text.isnumeric() or self.duration.text.isnumeric()):
+        elif (not self.roomid.text.isnumeric() or not self.duration.text.isnumeric()):
             pop = Popup(title = "Modify Booking",
                     content = Label(text="ERROR: Invalid input."),
                     size_hint=(None,None), size=(400,200))
@@ -749,6 +810,10 @@ class AdminHomepage(Screen):
         popup = ModifyEquipmentPopup()
         popup.open()
 
+    def modifySupplies(self):
+        popup = ModifySuppliesPopup()
+        popup.open()
+
     def modifySchedule(self):
         popup = ModifySchedulePopup()
         popup.open()
@@ -1080,6 +1145,9 @@ class MainApp(App):
         return sm
 
 if __name__ == "__main__":
+    owner = Owner(db)
+    # gym = Gym(db)
     MainApp().run()
+
     #GYM CLASS NEEDED
     db.close()

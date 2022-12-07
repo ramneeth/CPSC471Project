@@ -40,10 +40,15 @@ class Database:
 
 # create an new person in the Person table
     def createPerson(self, ssn, f, l, address, passw, phone, email):
-        insert = "INSERT INTO PERSON(ssn, fname, lname, address, pass, phone_number, email) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        values =(ssn, f, l, address, passw, phone, email)
-        self.cursor.execute(insert, values)
-        self.connect.commit()
+        try:
+            insert = "INSERT INTO PERSON(ssn, fname, lname, address, pass, phone_number, email) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            values =(ssn, f, l, address, passw, phone, email)
+            self.cursor.execute(insert, values)
+            self.connect.commit()
+            return 0
+        except Error as E:
+            print(E)
+            return -1
 
 # create a new client from the email of a person
     def createClient(self, email):
@@ -398,6 +403,31 @@ class Database:
             print(e)
             return -1
 
+    def addSupply(self, supplyno, supplyname, stock):
+        try:
+            insert = "INSERT INTO SUPPLIES(supply_no, sname, stock, branch_no) VALUES(%s,%s,%s,1);"
+            values = (int(supplyno),supplyname,int(stock),)
+            self.cursor.execute(insert,values)
+            self.connect.commit()
+            return 0
+        except Error as E:
+            print("ERROR: Something went wrong when inserting into supplies")
+            print(e)
+            return -1
+
+    def updateSupply(self,supplyno,stock):
+        try:
+            update = "UPDATE SUPPLIES SET stock = %s WHERE supply_no = %s AND branch_no = 1;"
+            values = (int(stock),int(supplyno))
+            self.cursor.execute(update,values)
+            self.connect.commit()
+            return 0
+        except Error as e:
+            print("ERROR: Something went wrong when updating supply stock")
+            print(e)
+            return -1
+        pass
+
     def addEquip(self, equipno, equipname, cdn, branch_no):
         try:
             insert = "INSERT INTO EQUIPMENT(equipment_no, equipment_name, cdn, branch_no) VALUES(%s,%s,%s,%s);"
@@ -410,7 +440,7 @@ class Database:
             print(e)
             return -1
 
-    def UpdateEquip(self, equipno, cdn):
+    def updateEquip(self, equipno, cdn):
         try:
             update = "UPDATE EQUIPMENT SET cdn = %s WHERE equipment_no = %s AND branch_no = 1;"
             values = (cdn,int(equipno))
@@ -503,4 +533,21 @@ class Database:
         except Error as E:
             print("Error: Something went wrong when removing from schedule")
             print(E)
+            return -1
+
+    def createOwner(self, email):
+        self.cursor.execute("Select * FROM PERSON WHERE email = %s GROUP BY email", (email,))
+        results = self.cursor.fetchall()
+        if (self.cursor.rowcount > 0):
+            # print(results)
+            try:
+                insert = "INSERT INTO OWNER (ossn, fname, lname, address, owner_pass, phone_number, owner_email, Branch_num) VALUES (%s, %s, %s, %s, %s, %s, %s,1)"
+                values = results[0]
+                self.cursor.execute(insert, values)
+                self.connect.commit()
+                return 0
+            except Error as E:
+                print("Error occured while inserting into owner.")
+                return -1
+        else:
             return -1

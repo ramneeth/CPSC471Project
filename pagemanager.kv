@@ -8,6 +8,59 @@
 #     size: (400,200)
 #     auto_dismiss: False
 
+<ModifySuppliesPopup>:
+    title: "Modify Supplies"
+    size_hint: (None, None)
+    size: (400,400)
+    supplyno: supplyno
+    supplyname: supplyname
+    stock: stock
+    FloatLayout:
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.9}
+            size_hint: 0.7,0.08
+            text: "Supply No."
+        TextInput:
+            id: supplyno
+            pos_hint: {'x': 0.1, 'center_y':0.8}
+            size_hint: 0.8, 0.1
+            multiline: False
+        Label:
+            # pos_hint: {'x': 0.15, 'center_y':0.3}
+            pos_hint: {'x': 0.15, 'center_y':0.7}
+            size_hint: 0.7,0.08
+            text: "Supply Name (Only when adding)"
+        TextInput:
+            id: supplyname
+            # pos_hint: {'x': 0.1, 'center_y':0.2}
+            pos_hint: {'x': 0.1, 'center_y':0.6}
+            size_hint: 0.8, 0.1
+            multiline: False
+        Label:
+            pos_hint: {'x': 0.15, 'center_y':0.5}
+            size_hint: 0.7,0.08
+            text: "Stock"
+        TextInput:
+            id: stock
+            # pos_hint: {'x': 0.1, 'center_y':0.2}
+            pos_hint: {'x': 0.1, 'center_y':0.4}
+            size_hint: 0.8, 0.1
+            multiline: False
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: 0.1
+            pos_hint: {'center_x':0.5, 'center_y':0.05}
+            Button:
+                text: "Add Supply"
+                size_hint: 0.25, 0.2
+                on_release: root.addSupply()
+            Button:
+                text: "Update Supply Stock"
+                size_hint: 0.25, 0.2
+                on_release:
+                    root.updateSupply()
+
 <ModifySchedulePopup>:
     title: "Modify Schedule"
     size_hint: (None, None)
@@ -361,7 +414,7 @@
                             id: user_addr
                             text: "Home Address:"
         TabbedPanelItem:
-            text: "Member Control Panel"
+            text: "Admin Control Panel"
             text_size: self.size
             FloatLayout:
                 Label:
@@ -506,7 +559,7 @@
                     size_hint_y: 0.1
                     Button:
                         text: "Modify Supplies"
-                        # on_release: root.modifyEquip()
+                        on_release: root.modifySupplies()
 
 
         #----------------- SEE EQUIPMENT FOR ADMIN ------------------#

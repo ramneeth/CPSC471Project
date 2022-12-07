@@ -17,12 +17,14 @@ from Member import Member
 from Employee import Employee
 from Manager import Manager
 from Owner import Owner
+from Subscription import Subscription
 from WeeklySchedule import WeeklySchedule
 
 db = Database()
 person = Person(db)
 classes = Class(db)
 supplies = Supplies(db)
+subscriptions = Subscription(db)
 equipment = Equipment(db)
 rooms = Room(db)
 client = Client(db)
@@ -771,6 +773,12 @@ class AdminHomepage(Screen):
     def getSupplies(self):
         headers = ["supplyname","supplyno","stock"]
         result = [dict(zip(headers, data)) for data in supplies.getAllSupplies()]
+        # print(result)
+        return result
+
+    def getSubs(self):
+        headers = ["subname","loginID","status"]
+        result = [dict(zip(headers, data)) for data in subscriptions.getSubs()]
         # print(result)
         return result
 

@@ -346,6 +346,7 @@
     supplies: supplies
     equipment: equipment
     rooms: rooms
+    subscriptions: subscriptions
     schedulesun: schedulesun
     schedulemon: schedulemon
     scheduletues: scheduletues
@@ -641,6 +642,37 @@
                     Button:
                         text: "Modify booking"
                         on_release: root.modifyBooking()
+
+         #----------------- SEE SUBSCRIPTIONS FOR EMPLOYEE ------------------#
+        TabbedPanelItem:
+            text: "See Subscriptions"
+            text_size: self.size
+            GridLayout:
+                cols: 1
+                rows: 2
+                GridLayout:
+                    cols: 3
+                    rows: 1
+                    size_hint_y: 0.04
+                    Label:
+                        text: "Subscription Name"
+                    Label:
+                        text: "Status"
+                    Label:
+                        text: "Login ID"
+                GridLayout:
+                    cols: 1
+                    rows: 1
+                    size_hint_y: 0.96
+                    RecycleView:
+                        id: subscriptions
+                        viewclass: 'ThreeFieldLine'
+                        RecycleBoxLayout:
+                            default_size: None, dp(56)
+                            default_size_hint: 1, None
+                            size_hint_y: None
+                            height: self.minimum_height
+                            orientation: 'vertical'
 
         #----------------- SEE SCHEDULE FOR ADMIN ------------------#
         TabbedPanelItem:

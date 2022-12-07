@@ -2,7 +2,7 @@ from connection import *
 from Admin import *
 
 class Owner(Admin):
-    def __init__(self):
+    def __init__(self, database):
         self.ssn = 123456789
         self.fname = "Jalal"
         self.lname = "Kawash"
@@ -10,8 +10,9 @@ class Owner(Admin):
         self.phone = 4034034033
         self.email = "jalal.kawash@ucalgary.ca"
         self.password = "cpsc"
-        createPerson(self.ssn, self.fname, self.lname, self.address, self.phone, self.email, self.password)
-        createOwner(self.ssn, self.email, self.phone, self.fname, self.lname, self.address, self.password)
+        self.db = database
+        self.db.createPerson(self.ssn, self.fname, self.lname, self.address, self.phone, self.email, self.password)
+        self.dbcreateOwner(self.ssn, self.email, self.phone, self.fname, self.lname, self.address, self.password)
         self.id = getOwnerID(self.ssn)
         
     def getowner(self):

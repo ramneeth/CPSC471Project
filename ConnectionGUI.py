@@ -676,14 +676,20 @@ class Database:
         self.cursor.execute("SELECT login_id, name, status FROM SUBSCRIPTIONS;")
         data = self.cursor.fetchall()
         subs = []
-        subs.append(data[0]) #append the login id
-        subs.append(data[1]) #append the name
-        if(data[2] == True):
-            subs.append('Active')
-        else:
-            subs.append('Unactive')
+       
+        for row in data:
+            new = []
+            new.append(row[0]) #append the login id
+            new.append(row[1]) #append the name
+            if(row[2] == 1):
+                subs.append('Active')
+            else:
+                subs.append('Unactive')
+            
+            subs.append(new)
             
         return subs
+    
         
         
         

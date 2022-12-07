@@ -1,21 +1,16 @@
-from connection import *
-from Client import *
 
-class Member(Client):
+class Member:
     def __init__(self, database):
-        self.ssn = None
-        self.fname = None
-        self.lname = None
-        self.address = None
-        self.phone = None
-        self.email = None
-        self.memberID = None
-        self.status = None
-    
-    def addMember(ssn, email, phone, f, l, address, memberID, status):
-        self.db.createMember(ssn, id, email, phone, f, l, address,memberID, status)
-        self.id = getMemberID(ssn)
+        self.db = database
         
+    def createMember(self, email):
+        results = self.db.createMember(email)
+        return results
+
+    def removeMember(self, email):
+        results = self.db.removeMember(email)
+        return results
+
     def getStatus(self, memberID):
         return self.status
         

@@ -1,5 +1,3 @@
-from connection import *
-
 class Class:
     def __init__(self, database):
         self.class_no = None
@@ -10,6 +8,10 @@ class Class:
         self.t_email = None
         self.t_id = None
         self.db = database
+
+    def getAllClasses(self):
+        results = self.db.getClassInfo()
+        return results
         
         
     def addClass(self, no, date, time, ssn, id, email):

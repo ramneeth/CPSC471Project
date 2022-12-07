@@ -1,6 +1,3 @@
-from connection import *
-from Associate import *
-
 class Equipment:
     def __init__(self, database):
         self.no = None
@@ -10,17 +7,17 @@ class Equipment:
         self.equipment_name = None
         self.db = database
         
+    def getAllEquipment(self):
+        results = self.db.getEquipInfo()
+        return results
         
-    def createEquipment(self, no, amount, condition, name):
-        self.no = no
-        self.amount = amount
-        self.condition = condition
-        self.equipment_name = name
-        self.db.createEquip(no, amount, condition, self.branch, name)
+    def createEquipment(self, no, name, condition):
+        result = self.db.createEquip(no, name, condition, self.branch_no)
+        return result
         
-    def updateCondition(self, status):
-        self.db.updateEquipCond(self.no, status)
-        self.status = status
+    def updateCondition(self, no, condition):
+        result = self.db.updateEquipCond(no, condition)
+        return result
         
     def addAmount(self):
         self.db.updateEquipAmount(self.no)

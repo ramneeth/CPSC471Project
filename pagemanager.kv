@@ -346,7 +346,7 @@
     supplies: supplies
     equipment: equipment
     rooms: rooms
-    subscriptions: subscriptions
+    subscription: subscription
     schedulesun: schedulesun
     schedulemon: schedulemon
     scheduletues: scheduletues
@@ -655,17 +655,17 @@
                     rows: 1
                     size_hint_y: 0.04
                     Label:
+                        text: "Login ID"
+                    Label:
                         text: "Subscription Name"
                     Label:
                         text: "Status"
-                    Label:
-                        text: "Login ID"
                 GridLayout:
                     cols: 1
                     rows: 1
                     size_hint_y: 0.96
                     RecycleView:
-                        id: subscriptions
+                        id: subscription
                         viewclass: 'ThreeFieldLine'
                         RecycleBoxLayout:
                             default_size: None, dp(56)

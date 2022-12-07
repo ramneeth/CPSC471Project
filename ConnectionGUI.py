@@ -673,7 +673,7 @@ class Database:
             return -1
         
     def getSubscriptions(self):
-        self.cursor.execute("SELECT login_id, name, status FROM SUBSCRIPTIONS;")
+        self.cursor.execute("SELECT login_id, name, status FROM SUBSCRIPTION;")
         data = self.cursor.fetchall()
         subs = []
        

@@ -24,7 +24,7 @@ db = Database()
 person = Person(db)
 classes = Class(db)
 supplies = Supplies(db)
-subscriptions = Subscription(db)
+subscription = Subscription(db)
 equipment = Equipment(db)
 rooms = Room(db)
 client = Client(db)
@@ -442,6 +442,7 @@ class AdminHomepage(Screen):
     user_email = ObjectProperty(None)
     user_phone = ObjectProperty(None)
     user_addr = ObjectProperty(None)
+   
     pass 
 
     def __init__(self, **kwargs):
@@ -452,6 +453,8 @@ class AdminHomepage(Screen):
         self.supplies.data = [{'label_1': str(x['supplyno']), 'label_2': str(x['supplyname']), 'label_3': str(x['stock'])} for x in self.getSupplies()]
         self.equipment.data = [{'label_1': str(x['equipno']), 'label_2': str(x['cdn']), 'label_3': str(x['branchno'])} for x in self.getEquip()]
         self.rooms.data = [{'label_1': str(x['roomid']), 'label_2': str(x['date']), 'label_3': str(x['duration'])} for x in self.getRooms()]
+        self.subscription.data = [{'label_1': str(x['loginID']), 'label_2': str(x['subname']), 'label_3': str(x['status'])} for x in self.getSubs()]
+
         # self.getScheduleInfo()
         self.getScheduleInfo()
         # print(self.supplies.data)
@@ -778,7 +781,7 @@ class AdminHomepage(Screen):
 
     def getSubs(self):
         headers = ["subname","loginID","status"]
-        result = [dict(zip(headers, data)) for data in subscriptions.getSubs()]
+        result = [dict(zip(headers, data)) for data in subscription.getSubs()]
         # print(result)
         return result
 

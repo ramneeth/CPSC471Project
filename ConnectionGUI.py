@@ -295,7 +295,7 @@ class Database:
         self.cursor.execute("Select * FROM MEMBER WHERE member_email = %s GROUP BY member_email", (email,))
         self.cursor.fetchall()
         if (self.cursor.rowcount > 0):
-            return "member"
+            return "client"
         self.cursor.execute("Select * FROM CLIENT WHERE client_email = %s GROUP BY client_email", (email,))
         self.cursor.fetchall()
         if (self.cursor.rowcount > 0):

@@ -1,32 +1,33 @@
-from ConnectionGUI import *
-
 class Person:
     
-    def __init__(self,  database):
-        self.ssn = None
-        self.fname = None
-        self.lname = None
-        self.address = None
-        self.phone = None
-        self.email = None
-        self.password = None
+    def __init__(self, database):
+        # self.ssn = None
+        # self.fname = None
+        # self.lname = None
+        # self.address = None
+        # self.phone = None
+        # self.email = None
+        # self.password = None
         self.db = database
-        
-        
-        
-    def addPerson(self, ssn, f, l, address, phone, email, password):
-        self.ssn = ssn
-        self.fname = f
-        self.lname = l
-        self.address = address
-        self.phone = phone
-        self.email = email
-        self.password = password
         #create person inside the database
-        self.db.createPerson(ssn, f, l, address, phone, email, password)
-    
+
+    def getPersonInfo(self, email):
+        results = self.db.getPersonInfo(email)
+        return results
+
+    def checkUserType(self, email):
+        result = self.db.checkUserType(email)
+        return result
+        
+    def validateLogin(self, email,passw):
+        result = self.db.validateLogin(email,passw)
+        return result
+
+    def createPerson(self, ssn, f, l, address, phone, email, password):
+        self.db.createPerson(ssn, f, l, address, password, phone, email)
+
     def removePerson(self, ssn):
-        self.db.deletePerson(ssn)
+        deletePerson(ssn)
         
     def getName(self):
         fullName = self.fname + self.lname

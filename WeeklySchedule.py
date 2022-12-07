@@ -1,14 +1,11 @@
-from connection import *
-from Employee import *
 from datetime import date
-import random
 
 class WeeklySchedule:
     def __init__(self, database):
         self.db = database
         self.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday','Friday', 'Saturday']
         today = date.today()
-        self.week_no = today.isocalendar().week
+        # self.week_no = today.isocalendar().week
         self.timeSlots = ['6-10', '10-2', '2-6', '6-12']
         # i = 0
         # max = employees.size()
@@ -23,7 +20,7 @@ class WeeklySchedule:
             
         #array.append(times)
         
-        self.schedule = array
+        # self.schedule = array
         
         
     def getWeek(self):
@@ -36,9 +33,11 @@ class WeeklySchedule:
         return self.days
     
     def getSchedule(self, day):
-        return getWeeklySchedule(day) #will return an array of time slots for one day
+        #[6-10,10-2,2-6,6-12]
+        results = self.db.getWeeklySchedule(day) #will return an array of time slots for one day
+        # print(results)
+        return results
+
     
     def getEmployees(self):
         return self.db.getEmployees()
-    
-        

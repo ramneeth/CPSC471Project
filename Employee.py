@@ -1,6 +1,4 @@
-from connection import *
 from RestrictedUser import *
-from Person import *
 
 class Employee(RestrictedUser):
     
@@ -12,6 +10,18 @@ class Employee(RestrictedUser):
         self.phone = None
         self.email = None
         self.password = None
+        self.db = database
+
+    def createEmployee(self, email):
+        results = self.db.createRUser(email)
+        if (results == -1):
+            return -1
+        else:
+            results = self.db.createEmployee(email)
+            if (results == -1):
+                return -1
+            else:
+                return 0
         
         
     def addEmployee(self, ssn, email, phone, f, l, address, password):
@@ -34,5 +44,11 @@ class Employee(RestrictedUser):
         addNewEmployee(person.ssn, person.fname, person.lname, person.address,
                     person.phone, person.email, self.id)
         
-    def removeEmployee(self, ssn):
-        removeEmp(ssn)
+    def removeEmployee(self, email):
+        results = self.db.removeEmployee(email)
+        if (results != -1):
+            results = self.db.removeRUser(email)
+            if (results != -1):
+                return 0
+            else: return -1
+        else: return -1

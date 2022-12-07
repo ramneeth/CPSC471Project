@@ -1,4 +1,4 @@
-from connection import *
+
 from Admin import *
 
 class Manager(Admin):
@@ -12,10 +12,28 @@ class Manager(Admin):
         self.branch = 1
         self.db = database
         
+
+    def createManager(self, email):
+        results = self.db.createAdmin(email)
+        if (results != -1):
+            results = self.db.createManager(email)
+            if (results != -1):
+                return 0
+            else: return -1
+        else: return -1
+
+    def removeManager(self, email):
+        results = self.db.removeManager(email)
+        if (results != -1):
+            results = self.db.removeAdmin(email)
+            if (results != -1):
+                return 0
+            else: return -1
+        else: return -1
         
-    def addManager(self, ssn, email, phone, f, l, address):
-        self.db.createManager(ssn, email, phone, f, l, address, self.branch)
-        self.id = getManagerID(ssn)
+    # def createManager(self, ssn, email, phone, f, l, address):
+    #     self.db.createManager(ssn, email, phone, f, l, address, self.branch)
+    #     self.id = getManagerID(ssn)
         
     def getManager(self):
         return self.ssn

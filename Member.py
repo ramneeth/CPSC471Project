@@ -1,5 +1,6 @@
+from Client import *
 
-class Member:
+class Member(Client):
     def __init__(self, database):
         self.db = database
         

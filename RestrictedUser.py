@@ -2,7 +2,17 @@ from connection import *
 from Person import *
 
 class RestrictedUser(Person):
-    def __init__(self, ssn, email, phone, f, l, address, password):
+    def __init__(self, database):
+        self.ssn = None
+        self.fname = None
+        self.lname = None
+        self.address = None
+        self.phone = None
+        self.email = None
+        self.password = None
+        self.db = database
+        
+    def addUser(self, ssn, email, phone, f, l, address, password):
         self.ssn = ssn
         self.fname = f
         self.lname = l

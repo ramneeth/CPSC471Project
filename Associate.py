@@ -20,7 +20,7 @@ class Associate(Employee):
         self.fname = f
         self.lname = l
         self.address = address
-        self.db.createAssociate(ssn, id, email, phone, f, l, address, branch)
+        self.db.createAssociate(ssn, email, phone, f, l, address, self.branch)
         self.id = getAssociateID(ssn)
     
     def getAssociate(self):

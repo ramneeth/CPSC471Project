@@ -215,7 +215,7 @@ FOREIGN KEY(t_id) REFERENCES TRAINER(t_user_id)
 
 DROP TABLE IF EXISTS WEEKLY_SCHEDULE;
 CREATE TABLE WEEKLY_SCHEDULE(
-r_email INT NOT NULL,
+r_email VARCHAR(25) NOT NULL,
 branch_no int NOT NULL,
 time_slots varchar(20) NOT NULL,
 day_slots varchar(20) NOT NULL,

@@ -81,7 +81,6 @@ VALUES ("gym_spotify", "spotify", 1),
         ("gym_netflix", "netflix", 1), 
         ("gym_hulu", "hulu", 1), 
         ("gym_apple", "apple Music", 1);
-        
 
 INSERT INTO WEEKLY_SCHEDULE
 VALUES ("t.w@ucalgary.ca", 1, '6-10', 'Sunday'),
